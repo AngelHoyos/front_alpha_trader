@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+
+#fondo_video_login{
+    clip-path: polygon(15% 100%, 100% 100%, 100% 0%, 0% 0%);
+
+}
