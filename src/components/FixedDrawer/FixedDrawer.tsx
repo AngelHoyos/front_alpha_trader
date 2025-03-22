@@ -4,31 +4,106 @@ import {
   StyledDrawer,
   StyledListItem,
 } from "./styled-component/FixedDrawe.style";
-import { List, ListItemText, Toolbar } from "@mui/material";
-import { faHouse } from "@fortawesome/free-solid-svg-icons";
+import {
+  Avatar,
+  Box,
+  List,
+  ListItemText,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import {
+  faHouse,
+  faMagnifyingGlassChart,
+  faMoon,
+  faRightFromBracket,
+  faWallet,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import { faBitcoin } from "@fortawesome/free-brands-svg-icons";
+import { useNavigates } from "../../hooks/useNavigates";
 interface MenuItem {
-    text: string;
-    icon: any; 
-    path: string;
-  }
-const menuItems: MenuItem[] = [{ text: "Inicio", icon: faHouse, path: "/login" }];
+  text: string;
+  icon: any;
+  path: string;
+}
+const menuItems: MenuItem[] = [
+  { text: "Inicio", icon: faHouse, path: "summary" },
+  { text: "Cartera", icon: faWallet, path: "wallet" },
+  { text: "Coins", icon: faBitcoin, path: "/login" },
+  { text: "Alpha X", icon: faMagnifyingGlassChart, path: "/login" },
+];
+const menuItemsDos = [
+  // { text: "Modo Oscuro", icon: faMoon,  },
+  { text: "Cerrar Sesion", icon: faRightFromBracket },
+];
 const FixedDrawer: React.FC = () => {
+  const {goTo}= useNavigates();
   return (
     <div className="flex">
       <StyledDrawer variant="permanent">
-        <Toolbar />
-        <List>
-          {menuItems.map((item) => (
-            <StyledListItem key={item.text} as={Link} to={item.path}>
-              <IconWrapper>
-                <FontAwesomeIcon icon={item.icon} size="lg" />
-              </IconWrapper>
-              <ListItemText primary={item.text} />
-            </StyledListItem>
-          ))}
-        </List>
+        <Box sx={{ width: 240, my: 3, display: 'flex', flexDirection:'row', alignItems:'center', borderBottom:'2px solid rgb(87, 23, 115)', margin:'auto', padding:'25px 0 '}}>
+          <Avatar alt="Usuario" sx={{ width: 50, height: 50, margin:'0 auto', marginLeft:'15px', marginRight:'5px' }} />
+          <Typography variant="subtitle1" sx={{ mt: 1, marginLeft:'5px',fontWeight: "bold" }}>
+            Juan Hernandez
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            height: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "column",
+          }}
+        >
+          <List
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "column",
+            }}
+          >
+            {menuItems.map((item) => (
+              <StyledListItem
+                key={item.text}
+                as={Link}
+                onClick={() => goTo(`dashboard/${item.path}`)}
+                sx={{ paddingLeft: "12px",cursor: "pointer"  }}
+              >
+                <IconWrapper>
+                  <FontAwesomeIcon icon={item.icon} size="lg" />
+                </IconWrapper>
+                <ListItemText
+                  primary={<Typography variant="h6">{item.text} </Typography>}
+                />
+              </StyledListItem>
+            ))}
+          </List>
+          <List>
+            {menuItemsDos.map((item) => (
+              <StyledListItem
+                key={item.text}
+                sx={{
+                  "&:hover": {
+                    backgroundColor: "#B71C1C",
+                  },
+                }}
+              >
+                <IconWrapper>
+                  <FontAwesomeIcon icon={item.icon} size="lg" />
+                </IconWrapper>
+                <ListItemText
+                  primary={
+                    <Typography variant="h6" sx={{ fontSize: "1.2rem" }}>
+                      {item.text}{" "}
+                    </Typography>
+                  }
+                />
+              </StyledListItem>
+            ))}
+          </List>
+        </Box>
       </StyledDrawer>
     </div>
   );

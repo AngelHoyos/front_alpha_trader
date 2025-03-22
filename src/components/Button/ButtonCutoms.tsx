@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ButtonCustom } from "./styled-component/ButtomCustom.style";
 
 const ButtonCutoms: React.FC<ButtonCustomProps> = ({
-  className,
+  className='',
   text,
   onClick,
   disabled = false,
@@ -19,8 +19,7 @@ const ButtonCutoms: React.FC<ButtonCustomProps> = ({
       fullWidth={fullWidth}
       className={className}
     >
-      {icon && <FontAwesomeIcon icon={icon} />}{" "}
-      {/* Renderiza el ícono si existe */}
+      {icon && <FontAwesomeIcon icon={icon} />}
       {text}
     </ButtonCustom>
   );

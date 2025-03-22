@@ -6,27 +6,13 @@ import { motion } from "motion/react";
 import InputCustom from "../../components/Input/InputCustom";
 import ButtonCutoms from "../../components/Button/ButtonCutoms";
 import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { DataUserLogin } from "../../models/DataUserLogin.model";
-import { useNavigate } from "react-router";
+import { useAuthLogin } from "../../hooks/useAuthLogin";
+import { useNavigates } from "../../hooks/useNavigates";
 
 const Login: React.FC = () => {
-  const navigate = useNavigate();
-  const [userDataLogin, setUserDataLogin] = useState<DataUserLogin>({
-    correo_electronico: "",
-    contraseña: "",
-  });
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setUserDataLogin((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = () => {
-    console.log("hollll");
-  };
-  const goRegister = () => {
-    navigate("/");
-  };
-
+  const {userDataLogin, handleChange, handleSubmit}= useAuthLogin();
+const {goToRegister}=useNavigates()
+  
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -131,7 +117,7 @@ const Login: React.FC = () => {
         <div className="bottom-10 left-2/5 flex absolute z-20 w-full">
           <ButtonCutoms
             text="Registrarse"
-            onClick={goRegister}
+            onClick={goToRegister}
             className="w-[30%] bg-white/0! border-2! border-solid border-white rounded-xl! text-xl!"
           />
         </div>

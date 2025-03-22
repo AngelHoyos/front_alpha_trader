@@ -1,16 +1,21 @@
 import { Drawer, Box, ListItemButton } from "@mui/material";
-import { styled } from "@mui/system";
+import { borderRadius, borderRight, margin, padding, styled, width } from "@mui/system";
+import { color } from "motion/react";
 
-const drawerWidth = 240;
+const drawerWidth = 250;
 
 export const StyledDrawer = styled(Drawer)({
   width: drawerWidth,
   flexShrink: 0,
   "& .MuiDrawer-paper": {
     width: drawerWidth,
+    borderTopRightRadius:'10px',
+    borderBottomRightRadius:'10px',
+    borderRight:'2px solid rgb(87, 23, 115)',
     boxSizing: "border-box",
-    backgroundColor: "#000317",
+    backgroundColor: "#000411",
     color: "white",
+    overflow: "hidden",
   },
 });
 
@@ -21,17 +26,28 @@ export const MainContent = styled(Box)({
 
 export const StyledListItem = styled(ListItemButton)<{to?:string}>({
   color: "white",
+  width:'220px',
+  height:"53px",
   display: "flex",
   alignItems: "center",
+  textAlign: "left",
+  marginTop: "15px",
+  marginBottom: "15px",
+  fontSize: "20px",
+  margin: "10px auto",
+
   gap: "12px", // Espacio entre icono y texto
   "&:hover": {
-    backgroundColor: "#5114A6",
+    backgroundColor: "rgba(87, 23, 115, 0.68)",
+    borderRadius: "10px",
+    color:'white',
   },
 });
 
 export const IconWrapper = styled("div")({
   minWidth: "40px",
   display: "flex",
+  fontSize: "19px",
   justifyContent: "center",
   alignItems: "center",
 });

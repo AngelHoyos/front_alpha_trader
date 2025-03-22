@@ -3,6 +3,8 @@ import "./App.css";
 import { Register } from "./pages/Register/Register";
 import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import Summary from "./pages/Dashboard/Summary/Summary";
+import Wallet from "./pages/Dashboard/Wallet/Wallet";
 
 function App() {
   return (
@@ -10,7 +12,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/Dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />}>
+          <Route index element={<Summary />} />
+          <Route path="summary" element={<Summary />} />
+          <Route path="wallet" element={<Wallet />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
