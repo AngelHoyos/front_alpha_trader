@@ -1,9 +1,11 @@
 import React from "react";
-import AreaChart from "../../../components/Charts/Area/AreaChart";
 import { Box } from "@mui/material";
 import HistoryTable from "../../../components/HistoryTable/HistoryTable";
 import TopCoins from "./components/TopCoins/TopCoins";
-
+import CryptoChart from "../../../components/Charts/Area/AreaChart";
+import CardAds from "../../../components/CardAds/CardAds";
+import ImgCard from "../../../../public/assets/imgs/img1.png";
+import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 const Summary = () => {
   const coinHistoryData = [
     {
@@ -11,7 +13,7 @@ const Summary = () => {
       iconMoneda: "🪙",
       moneda: "Bitcoin",
       ltp: 65800,
-      porcentaje: "+2.5%",
+      porcentaje: "2.5%",
       valor: 1.5,
     },
     {
@@ -19,7 +21,7 @@ const Summary = () => {
       iconMoneda: "⚡",
       moneda: "Ethereum",
       ltp: 3800,
-      porcentaje: "-1.2%",
+      porcentaje: "1.2%",
       valor: 3.2,
     },
     {
@@ -27,7 +29,7 @@ const Summary = () => {
       iconMoneda: "🌕",
       moneda: "Dogecoin",
       ltp: 0.15,
-      porcentaje: "+5.0%",
+      porcentaje: "-5.0%",
       valor: 1500,
     },
     {
@@ -35,28 +37,158 @@ const Summary = () => {
       iconMoneda: "🏛️",
       moneda: "BNB",
       ltp: 420,
-      porcentaje: "-0.8%",
+      porcentaje: "0.8%",
       valor: 2.8,
     },
   ];
-  return (
-    <Box>
-      <Box>
-        <AreaChart
-          categories={[1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]}
-          series={[
-            { name: "series-1", data: [30, 40, 45, 50, 49, 60, 70, 91] },
-          ]}
-          type="area"
-          width={600}
-        />
-      </Box>
 
-      <Box>
+  const generateCryptoData = (initialPrice, variations, volatility) => {
+    let price = initialPrice;
+    return variations.map((time, index) => {
+      // Genera una variación aleatoria positiva o negativa
+      const change = (Math.random() * volatility * 2 - volatility).toFixed(2);
+      price = Math.max(40000, price + parseFloat(change)); // Asegura que no baje de 40,000
+      return { time, price };
+    });
+  };
+
+  const cryptoData = {
+    dia: generateCryptoData(
+      45000,
+      [
+        "10:00 AM",
+        "10:10 AM",
+        "10:20 AM",
+        "10:30 AM",
+        "10:40 AM",
+        "10:50 AM",
+        "11:00 AM",
+      ],
+      800
+    ),
+    semana: generateCryptoData(
+      44000,
+      [
+        "Lunes",
+        "Martes",
+        "Miércoles",
+        "Jueves",
+        "Viernes",
+        "Sábado",
+        "Domingo",
+      ],
+      2000
+    ),
+    mes: generateCryptoData(
+      43000,
+      ["1 Mar", "5 Mar", "10 Mar", "15 Mar", "20 Mar", "25 Mar", "30 Mar"],
+      5000
+    ),
+  };
+
+  const dummyCoins = [
+    {
+      id: "btc",
+      icon: "🟡",
+      moneda: "Bitcoin",
+      estado: "subió",
+      iconEstado: faArrowUp,
+      valor: 0.23,
+    },
+    {
+      id: "eth",
+      icon: "🔵",
+      moneda: "Ethereum",
+      estado: "bajó",
+      iconEstado: faArrowDown,
+      valor: -1.8,
+    },
+    {
+      id: "bnb",
+      icon: "🟢",
+      moneda: "Binance Coin",
+      estado: "subió",
+      iconEstado: faArrowUp,
+      valor: 3.5,
+    },
+    {
+      id: "bnb",
+      icon: "🟢",
+      moneda: "Binance Coin",
+      estado: "subió",
+      iconEstado: faArrowUp,
+      valor: 3.5,
+    },
+    {
+      id: "bnb",
+      icon: "🟢",
+      moneda: "Binance Coin",
+      estado: "subió",
+      iconEstado: faArrowUp,
+      valor: 3.5,
+    },
+    {
+      id: "bnb",
+      icon: "🟢",
+      moneda: "Binance Coin",
+      estado: "subió",
+      iconEstado: faArrowUp,
+      valor: 3.5,
+    },
+    {
+      id: "bnb",
+      icon: "🟢",
+      moneda: "Binance Coin",
+      estado: "subió",
+      iconEstado: faArrowUp,
+      valor: 3.5,
+    },
+    {
+      id: "bnb",
+      icon: "🟢",
+      moneda: "Binance Coin",
+      estado: "subió",
+      iconEstado: faArrowUp,
+      valor: 3.5,
+    },
+    
+  ];
+
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "row",
+        gap: 2, 
+        px: 2, 
+        
+      }}
+    >
+      {/* Contenedor Principal (Gráficos y Tabla) */}
+      <Box
+        sx={{
+          flex: 3, 
+          display: "flex",
+          flexDirection: "column",
+          gap: 3, 
+        }}
+      >
+        <CryptoChart title="Análisis" data={cryptoData} />
         <HistoryTable data={coinHistoryData} />
       </Box>
-      <Box>
-        <TopCoins/>
+
+      {/* Barra Lateral */}
+      <Box
+        sx={{
+          flex: 1, 
+          display: "flex",
+          flexDirection: "column",
+          gap: 2, 
+        }}
+      >
+        <CardAds img={ImgCard} title="Potencia tu inversión con Alpha X" />
+        <TopCoins coinsData={dummyCoins}/>
       </Box>
     </Box>
   );

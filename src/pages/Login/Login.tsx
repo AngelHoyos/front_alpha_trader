@@ -31,6 +31,10 @@ const {goToRegister}=useNavigates()
       transition: { duration: 0.5, ease: "easeOut" },
     },
   };
+
+  const hanldeButton = () => {
+    console.log("hola");
+  };
   return (
     <motion.section
       variants={containerVariants}
@@ -79,13 +83,13 @@ const {goToRegister}=useNavigates()
           <div className="flex flex-row w-full items-center justify-center mt-5 gap-x-5">
             <ButtonCutoms
               text=""
-              onClick={handleSubmit}
+              onClick={hanldeButton}
               icon={faGoogle}
               className="w-12 h-12"
             />
             <ButtonCutoms
               text=""
-              onClick={handleSubmit}
+              onClick={hanldeButton}
               icon={faFacebookF}
               className="w-12 h-12"
             />

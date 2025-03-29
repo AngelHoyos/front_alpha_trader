@@ -1,16 +1,15 @@
-import { useNavigate } from "react-router";
-
+import { useNavigate } from "react-router-dom";
 
 export const useNavigates = () => {
-  const navigate=useNavigate();
-  const goTo=(path:string)=>{
-    navigate(path.toLowerCase());
-  }
-  const goToLogin=()=>goTo("/login");
-  
-  const goToRegister=()=>goTo("/");
+  const navigate = useNavigate();
+  const goTo = (path: string) => {
+    navigate(path);
+  };
+  const goToLogin = () => goTo("/login");
 
-  const goToDashboard=()=>goTo("/dashboard");
+  const goToRegister = () => goTo("/");
 
-  return {goTo, goToRegister,goToLogin,goToDashboard};
-}
+  const goToDashboard = () => goTo("/dashboard");
+
+  return { goTo, goToRegister, goToLogin, goToDashboard };
+};

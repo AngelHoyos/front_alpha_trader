@@ -29,13 +29,12 @@ interface MenuItem {
   path: string;
 }
 const menuItems: MenuItem[] = [
-  { text: "Inicio", icon: faHouse, path: "summary" },
-  { text: "Cartera", icon: faWallet, path: "wallet" },
-  { text: "Coins", icon: faBitcoin, path: "/login" },
+  { text: "Inicio", icon: faHouse, path: "/summary" },
+  { text: "Cartera", icon: faWallet, path: "/wallet" },
+  { text: "Coins", icon: faBitcoin, path: "/coin" },
   { text: "Alpha X", icon: faMagnifyingGlassChart, path: "/login" },
 ];
 const menuItemsDos = [
-  // { text: "Modo Oscuro", icon: faMoon,  },
   { text: "Cerrar Sesion", icon: faRightFromBracket },
 ];
 const FixedDrawer: React.FC = () => {
@@ -68,7 +67,7 @@ const FixedDrawer: React.FC = () => {
               <StyledListItem
                 key={item.text}
                 as={Link}
-                onClick={() => goTo(`dashboard/${item.path}`)}
+                onClick={() => goTo(`${item.path}`)}
                 sx={{ paddingLeft: "12px",cursor: "pointer"  }}
               >
                 <IconWrapper>

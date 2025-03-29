@@ -5,6 +5,7 @@ import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Summary from "./pages/Dashboard/Summary/Summary";
 import Wallet from "./pages/Dashboard/Wallet/Wallet";
+import Coins from "./pages/Dashboard/Coins/Coins";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route index element={<Summary />} />
           <Route path="summary" element={<Summary />} />
           <Route path="wallet" element={<Wallet />} />
+          <Route path="coin" element={<Coins />} />
         </Route>
       </Routes>
     </BrowserRouter>
