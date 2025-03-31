@@ -23,28 +23,49 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { faBitcoin } from "@fortawesome/free-brands-svg-icons";
 import { useNavigates } from "../../hooks/useNavigates";
-interface MenuItem {
-  text: string;
-  icon: any;
-  path: string;
-}
+import { MenuItem } from "../../models/MenuFixedDrawer..model";
+
 const menuItems: MenuItem[] = [
   { text: "Inicio", icon: faHouse, path: "/summary" },
   { text: "Cartera", icon: faWallet, path: "/wallet" },
   { text: "Coins", icon: faBitcoin, path: "/coin" },
   { text: "Alpha X", icon: faMagnifyingGlassChart, path: "/login" },
 ];
-const menuItemsDos = [
+const menuItemsDos: MenuItem[] = [
   { text: "Cerrar Sesion", icon: faRightFromBracket },
 ];
 const FixedDrawer: React.FC = () => {
-  const {goTo}= useNavigates();
+  const { goTo } = useNavigates();
   return (
     <div className="flex">
       <StyledDrawer variant="permanent">
-        <Box sx={{ width: 240, my: 3, display: 'flex', flexDirection:'row', alignItems:'center', borderBottom:'2px solid rgb(87, 23, 115)', margin:'auto', padding:'25px 0 '}}>
-          <Avatar alt="Usuario" sx={{ width: 50, height: 50, margin:'0 auto', marginLeft:'15px', marginRight:'5px' }} />
-          <Typography variant="subtitle1" sx={{ mt: 1, marginLeft:'5px',fontWeight: "bold" }}>
+        <Box
+          sx={{
+            width: 240,
+            my: 3,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            borderBottom: "2px solid rgb(87, 23, 115)",
+            margin: "auto",
+            padding: "25px 0 ",
+          }}
+        >
+          <Avatar
+            alt="Usuario"
+            onClick={() => goTo("profile")}
+            sx={{
+              width: 50,
+              height: 50,
+              margin: "0 auto",
+              marginLeft: "15px",
+              marginRight: "5px",
+            }}
+          />
+          <Typography
+            variant="subtitle1"
+            sx={{ mt: 1, marginLeft: "5px", fontWeight: "bold" }}
+          >
             Juan Hernandez
           </Typography>
         </Box>
@@ -66,9 +87,9 @@ const FixedDrawer: React.FC = () => {
             {menuItems.map((item) => (
               <StyledListItem
                 key={item.text}
-                as={Link}
-                onClick={() => goTo(`${item.path}`)}
-                sx={{ paddingLeft: "12px",cursor: "pointer"  }}
+                component={Link}
+                to={"/dashboard" + item.path}
+                sx={{ paddingLeft: "12px", cursor: "pointer" }}
               >
                 <IconWrapper>
                   <FontAwesomeIcon icon={item.icon} size="lg" />

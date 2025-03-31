@@ -7,3 +7,8 @@ export interface ButtonCustomProps{
     fullWidth?:boolean;
     icon?:IconDefinition
 }
+
+export interface ButtonCustomLoading{
+    onClick: ()=>Promise<void>;
+    children: React.ReactNode;
+}
