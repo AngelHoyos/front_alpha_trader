@@ -10,9 +10,9 @@ import { useAuthLogin } from "../../hooks/useAuthLogin";
 import { useNavigates } from "../../hooks/useNavigates";
 
 const Login: React.FC = () => {
-  const {userDataLogin, handleChange, handleSubmit}= useAuthLogin();
-const {goToRegister}=useNavigates()
-  
+  const { userDataLogin, handleChange, handleSubmit } = useAuthLogin();
+  const { goToRegister } = useNavigates();
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -58,21 +58,48 @@ const {goToRegister}=useNavigates()
         <div className="w-full flex justify-center items-center mt-10  flex-col">
           <div className="w-[50%] grid grid-cols-1 gap-y-10 mb-7">
             <InputCustom
-              label="Correo Electronico"
+              label="Correo Electrónico"
               name="correo_electronico"
               type="text"
               value={userDataLogin.correo_electronico}
               onChange={handleChange}
-              fullWidth={false}
+              fullWidth
+              error={
+                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+                  userDataLogin.correo_electronico
+                )
+              }
+              helperText={
+                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+                  userDataLogin.correo_electronico
+                )
+                  ? "El correo es invalido"
+                  : ""
+              }
             />
-
             <InputCustom
               label="Contraseña"
               name="contraseña"
               type="password"
               value={userDataLogin.contraseña}
               onChange={handleChange}
-              fullWidth={false}
+              fullWidth
+              error={
+                userDataLogin.contraseña.length > 0 &&
+                (userDataLogin.contraseña.length < 8 ||
+                  !/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\.])[A-Za-z\d!@#$%^&*\.]{8,}/.test(
+                    userDataLogin.contraseña
+                  ))
+              }
+              helperText={
+                userDataLogin.contraseña.length > 0 &&
+                (userDataLogin.contraseña.length < 8 ||
+                  !/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\.])[A-Za-z\d!@#$%^&*\.]{8,}/.test(
+                    userDataLogin.contraseña
+                  ))
+                  ? "Debe tener 8 caracteres, mayúscula, minúscula, número y símbolo."
+                  : ""
+              }
             />
           </div>
           <ButtonCutoms

@@ -110,12 +110,24 @@ export const Register: React.FC = () => {
               />
 
               <InputCustom
-                label="Correo Electronico"
+                label="Correo Electrónico"
                 name="correo_electronico"
                 type="text"
                 value={userData.correo_electronico}
                 onChange={handleChange}
-                fullWidth={false}
+                fullWidth
+                error={
+                  !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+                    userData.correo_electronico
+                  )
+                }
+                helperText={
+                  !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+                    userData.correo_electronico
+                  )
+                    ? "El correo es invalido"
+                    : ""
+                }
               />
 
               <InputCustom
@@ -142,7 +154,23 @@ export const Register: React.FC = () => {
                 type="password"
                 value={userData.contraseña}
                 onChange={handleChange}
-                fullWidth={false}
+                fullWidth
+                error={
+                  userData.contraseña.length > 0 &&
+                  (userData.contraseña.length < 8 ||
+                    !/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\.])[A-Za-z\d!@#$%^&*\.]{8,}/.test(
+                      userData.contraseña
+                    ))
+                }
+                helperText={
+                  userData.contraseña.length > 0 &&
+                  (userData.contraseña.length < 8 ||
+                    !/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\.])[A-Za-z\d!@#$%^&*\.]{8,}/.test(
+                      userData.contraseña
+                    ))
+                    ? "Debe tener 8 caracteres, mayúscula, minúscula, número y símbolo."
+                    : ""
+                }
               />
 
               <InputCustom

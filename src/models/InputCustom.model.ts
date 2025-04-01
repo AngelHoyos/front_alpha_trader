@@ -3,7 +3,7 @@ export interface InputCustomProps{
     name: string;
     type?:string;
     value:any;
-    onChange:(event:React.ChangeEvent<HTMLInputElement>)=>void;
+    onChange?:(event:React.ChangeEvent<HTMLInputElement>)=>void;
     fullWidth?:boolean;
     InputLabelProps?:boolean;
     error?:boolean;

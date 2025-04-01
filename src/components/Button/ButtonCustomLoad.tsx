@@ -27,6 +27,7 @@ export const ButtonCustomLoad: React.FC<ButtonCustomLoading> = ({
         backgroundColor: "#5114A6",
         textTransform: "none",
         fontSize: "1rem",
+        width:'15%'
       }}
     >
       {loading ? "Cargando..." : children}{" "}

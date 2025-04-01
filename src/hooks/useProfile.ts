@@ -8,7 +8,7 @@ export const useProfile = () => {
     correo_electronico: "jh746509@gmail.com",
     fecha_nacimiento: "2005-10-10",
     telefono: "3112506998",
-    contraseña: "********",
+    contraseña: "123456789.As",
   });
   const [message, setMessage] = useState({ text: "", type: "" });
 

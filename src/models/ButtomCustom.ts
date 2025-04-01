@@ -9,6 +9,6 @@ export interface ButtonCustomProps{
 }
 
 export interface ButtonCustomLoading{
-    onClick: ()=>Promise<void>;
+    onClick: ()=>void;
     children: React.ReactNode;
 }
