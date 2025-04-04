@@ -31,8 +31,7 @@ export const useAuthLogin = () => {
       console.log("Usuario autenticado con éxito");
 
       goToDashboard();     } catch (error: any) {
-      console.error("Error en login:", error.response?.data || error.message);
-      alert("Usuario o contraseña incorrectos");
+      console.error("Error en login:", error.response?.data );
     }
   };
    return {userDataLogin, handleChange, handleSubmit};

@@ -33,7 +33,7 @@ export const useCreateRegister = () => {
   const handleSubmitFacebook = async () => {
     try {
 
-      window.location.href = "http://localhost:10101/auth/facebook/callback";
+      window.location.href = "http://localhost:10101/auth/facebook";
       
     } catch (error) {
       console.error("Error al iniciar sesión con Facebook", error);
@@ -95,6 +95,7 @@ export const useCreateRegister = () => {
       goToDashboard();
     } catch (error: any) {
       closeLoading();
+  console.log(error.response?.data);
   
       setAlerta({
         id: Date.now(),
