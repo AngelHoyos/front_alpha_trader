@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style-register/style-register.css";
 import videoFondo from "../../../public/assets/video/fondo_register.mp4";
 import { motion } from "motion/react";
@@ -15,6 +15,7 @@ export const Register: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { goToLogin } = useNavigates();
   const {
+    handleSubmitFacebook,
     handleAcceptTerms,
     handleSubmit,
     handleChange,
@@ -22,10 +23,11 @@ export const Register: React.FC = () => {
     alerta,
     userData,
     acceptedTerms,
+    handleSubmitGoogle,
   } = useCreateRegister();
 
   const hanldeButton = () => {
-    console.log("hola");
+    console.log("chao");
   };
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -207,13 +209,13 @@ export const Register: React.FC = () => {
             <div className="flex flex-row w-full items-center justify-center mt-5 gap-x-5">
               <ButtonCutoms
                 text=""
-                onClick={hanldeButton}
+                onClick={handleSubmitGoogle}
                 icon={faGoogle}
                 className="w-12 h-12 "
               />
               <ButtonCutoms
                 text=""
-                onClick={hanldeButton}
+                onClick={handleSubmitFacebook}
                 icon={faFacebookF}
                 className="w-12 h-12"
               />
