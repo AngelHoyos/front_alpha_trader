@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpRightFromSquare, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const cardStyles = {
-  width: 350,
+  width: 400,
   bgcolor: "rgba(81,20,166,0.45)",
   border: "1px solid #5114A6",
   color: "white",
@@ -28,7 +28,6 @@ const cardStyles = {
 const modalStyles = {
   position: "absolute" as const,
   top: "50%",
-  height: "45%",
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: { xs: "90%", sm: 550 },

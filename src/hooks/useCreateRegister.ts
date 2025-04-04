@@ -3,7 +3,7 @@ import { DataUser } from "../models/DataUserRegister.model";
 import { AlertCustomProps } from "../models/AlertCustom";
 import { closeLoading, Loading } from "../components/Alerts/Loading";
 import { useNavigates } from "./useNavigates";
-import axiosInstance from "../api/axiosinstance/axiosinstance";
+import axiosInstance from "../api/axiosInstance/axiosInstance";
 
 
 export const useCreateRegister = () => {

@@ -293,7 +293,7 @@ const Coins = () => {
           Mercado
           </Typography>
         </Box>
-        <CoinsTable coins={sampleCoins} />
+        <CoinsTable coins={sampleCoins} show={false} />
       </Box>
     </Box>
   );

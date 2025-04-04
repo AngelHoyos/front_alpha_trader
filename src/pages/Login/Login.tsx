@@ -49,7 +49,7 @@ const Login: React.FC = () => {
       >
         <div className="w-full flex justify-center flex-col items-center">
           <h1 className="font-montserrat font-bold text-white mb-4 text-2xl">
-            Iniciar Sesion
+            Iniciar Sesión
           </h1>
           <p className="font-montserrat font-medium text-white/60 text-[22px] tracking-widest">
             Bienvenido a Alpha Trader

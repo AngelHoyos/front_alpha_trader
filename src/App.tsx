@@ -7,6 +7,8 @@ import Summary from "./pages/Dashboard/Summary/Summary";
 import Wallet from "./pages/Dashboard/Wallet/Wallet";
 import Coins from "./pages/Dashboard/Coins/Coins";
 import Profile from "./components/Profile/Profile";
+import CoinDetails from "./pages/Dashboard/Coins/components/CoinDetails/CoinDetails";
+import AlphaX from "./pages/Dashboard/AlphaX/AlphaX";
 
 function App() {
   return (
@@ -19,9 +21,10 @@ function App() {
           <Route path="summary" element={<Summary />} />
           <Route path="wallet" element={<Wallet />} />
           <Route path="coin" element={<Coins />} />
-        <Route path="profile" element={<Profile />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="coins/:id" element={<CoinDetails />} />
+          <Route path="Alpha_X" element={<AlphaX />} />
         </Route>
-
       </Routes>
     </BrowserRouter>
   );

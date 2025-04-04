@@ -1,6 +1,6 @@
 import { DataUserLogin } from "./../models/DataUserLogin.model";
 import { useState } from "react";
-import axiosInstance from "../api/axiosinstance/axiosinstance";
+import axiosInstance from "../api/axiosInstance/axiosInstance";
 import { useNavigates } from "./useNavigates";
 
 
