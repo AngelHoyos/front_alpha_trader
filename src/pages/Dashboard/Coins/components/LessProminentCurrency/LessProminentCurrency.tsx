@@ -19,7 +19,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const cardStyles = {
-  width: 350,
+  width: 400,
   bgcolor: "rgba(81,20,166,0.45)",
   border: "1px solid #5114A6",
   color: "white",
@@ -34,7 +34,6 @@ const modalStyles = {
   position: "absolute" as const,
   top: "50%",
   left: "50%",
-  height: "45%",
   transform: "translate(-50%, -50%)",
   width: { xs: "90%", sm: 550 },
   bgcolor: "#000317",

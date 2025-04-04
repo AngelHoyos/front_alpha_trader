@@ -27,7 +27,7 @@ const MostProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
     <>
       <Card
         sx={{
-          width: 350,
+          width: 400,
           bgcolor: "rgba(81,20,166,0.45)",
           border: "1px solid #5114A6",
           color: "white",
@@ -108,7 +108,6 @@ const MostProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
           <Card
             sx={{
               width: { xs: "90%", sm: 550 },
-              height: "45%",
               bgcolor: "#000317",
               color: "white",
               borderRadius: 3,

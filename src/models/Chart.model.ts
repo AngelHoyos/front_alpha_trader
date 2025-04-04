@@ -11,7 +11,7 @@ export interface TypesProps {
 }
 
 export interface CryptoChartProps{
-    backgroundColor:string;
+    backgroundColor?:string;
     title:string;
     data:TypesProps;
 }

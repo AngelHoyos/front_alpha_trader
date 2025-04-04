@@ -28,7 +28,7 @@ import { MenuItem } from "../../models/MenuFixedDrawer..model";
 const menuItems: MenuItem[] = [
   { text: "Inicio", icon: faHouse, path: "/summary" },
   { text: "Coins", icon: faBitcoin, path: "/coin" },
-  { text: "Alpha X", icon: faMagnifyingGlassChart, path: "/login" },
+  { text: "Alpha X", icon: faMagnifyingGlassChart, path: "/Alpha_X" },
 ];
 const menuItemsDos: MenuItem[] = [
   { text: "Cerrar Sesion", icon: faRightFromBracket },
