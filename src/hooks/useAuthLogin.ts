@@ -10,8 +10,8 @@ interface ResponseToken {
 
 export const useAuthLogin = () => {
   const [userDataLogin, setUserDataLogin] = useState<DataUserLogin>({
-    correo_electronico: "",
-    contraseña: "",
+    Email: "",
+    Password: "",
   });
 
   const { goToDashboard } = useNavigates();
@@ -23,10 +23,7 @@ export const useAuthLogin = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axiosInstance.post<ResponseToken>("/auth/login", {
-        Email: userDataLogin.correo_electronico,
-        Password: userDataLogin.contraseña,
-      });
+      const response = await axiosInstance.post<ResponseToken>("/auth/login", userDataLogin);
 
       const { token } = response.data;
 

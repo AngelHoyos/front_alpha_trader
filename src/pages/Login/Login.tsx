@@ -59,19 +59,19 @@ const Login: React.FC = () => {
           <div className="w-[50%] grid grid-cols-1 gap-y-10 mb-7">
             <InputCustom
               label="Correo Electrónico"
-              name="correo_electronico"
+              name="Email"
               type="text"
-              value={userDataLogin.correo_electronico}
+              value={userDataLogin.Email}
               onChange={handleChange}
               fullWidth
               error={
                 !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-                  userDataLogin.correo_electronico
+                  userDataLogin.Email
                 )
               }
               helperText={
                 !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-                  userDataLogin.correo_electronico
+                  userDataLogin.Email
                 )
                   ? "El correo es invalido"
                   : ""
@@ -79,23 +79,23 @@ const Login: React.FC = () => {
             />
             <InputCustom
               label="Contraseña"
-              name="contraseña"
+              name="Password"
               type="password"
-              value={userDataLogin.contraseña}
+              value={userDataLogin.Password}
               onChange={handleChange}
               fullWidth
               error={
-                userDataLogin.contraseña.length > 0 &&
-                (userDataLogin.contraseña.length < 8 ||
+                userDataLogin.Password.length > 0 &&
+                (userDataLogin.Password.length < 8 ||
                   !/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\.])[A-Za-z\d!@#$%^&*\.]{8,}/.test(
-                    userDataLogin.contraseña
+                    userDataLogin.Password
                   ))
               }
               helperText={
-                userDataLogin.contraseña.length > 0 &&
-                (userDataLogin.contraseña.length < 8 ||
+                userDataLogin.Password.length > 0 &&
+                (userDataLogin.Password.length < 8 ||
                   !/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\.])[A-Za-z\d!@#$%^&*\.]{8,}/.test(
-                    userDataLogin.contraseña
+                    userDataLogin.Password
                   ))
                   ? "Debe tener 8 caracteres, mayúscula, minúscula, número y símbolo."
                   : ""
