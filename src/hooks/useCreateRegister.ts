@@ -41,6 +41,19 @@ export const useCreateRegister = () => {
   };
 
   const handleSubmit = async (): Promise<boolean> => {
+    const { FullName, Email, DateOfBirth, telefono, Password } = userData;
+
+    // Validar que todos los campos estén completos
+    if (!FullName || !Email || !DateOfBirth || !telefono || !Password || !confirmarContraseña) {
+      setAlerta({
+        id: Date.now(),
+        titulo: "Advertencia",
+        mensaje: "Debe llenar todos los campos antes de continuar.",
+        tipoAlerta: "warning",
+      });
+      return false;
+    }
+
     if (!acceptedTerms) {
       setAlerta({
         id: Date.now(),
@@ -51,7 +64,7 @@ export const useCreateRegister = () => {
       return false;
     }
 
-    if (userData.Password !== confirmarContraseña) {
+    if (Password !== confirmarContraseña) {
       setAlerta({
         id: Date.now(),
         titulo: "Error",
@@ -63,12 +76,12 @@ export const useCreateRegister = () => {
 
     try {
       const response = await axiosInstance.post<ResponseToken>("/user/register", {
-        Email: userData.Email,
-        Password: userData.Password,
-        FullName: userData.FullName,
-        DateOfBirth: userData.DateOfBirth,
-        telefono: userData.telefono,
-        acceptedTerms: acceptedTerms,
+        Email,
+        Password,
+        FullName,
+        DateOfBirth,
+        telefono,
+        acceptedTerms,
       });
 
       if (!response.data.token) {

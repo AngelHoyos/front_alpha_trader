@@ -228,10 +228,10 @@ export const Register: React.FC = () => {
 
             <div className="flex flex-row w-full items-center justify-center mt-5 gap-x-5">
               <ButtonCutoms
-                text=""
+                text="Google"
                 onClick={handleSubmitGoogle}
                 icon={faGoogle}
-                className="w-12 h-12"
+                className="h-12"
               />
             </div>
           </div>

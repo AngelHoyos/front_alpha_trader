@@ -2,6 +2,7 @@ import { useState } from "react";
 import axiosInstance from "../api/axiosInstance/axiosInstance";
 import { useNavigates } from "./useNavigates";
 import { DataUserLogin } from "../models/DataUserLogin.model";
+import { AlertCustomProps } from "../models/AlertCustom";
 
 interface ResponseToken {
   token: string;
@@ -14,6 +15,7 @@ export const useAuthLogin = () => {
     Password: "",
   });
 
+  const [alerta, setAlerta] = useState<AlertCustomProps | null>(null);
   const { goToDashboard } = useNavigates();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,18 +23,56 @@ export const useAuthLogin = () => {
     setUserDataLogin((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async () => {
-    try {
-      const response = await axiosInstance.post<ResponseToken>("/auth/login", userDataLogin);
+  const handleSubmit = async (): Promise<boolean> => {
+    const { Email, Password } = userDataLogin;
 
-      const { token } = response.data;
+    if (!Email || !Password) {
+      setAlerta({
+        id: Date.now(),
+        titulo: "Advertencia",
+        mensaje: "Debe llenar todos los campos antes de continuar.",
+        tipoAlerta: "warning",
+      });
+      return false;
+    }
+
+    try {
+      const response = await axiosInstance.post<ResponseToken>(
+        "/auth/login",
+        userDataLogin
+      );
+
+      const { token, message } = response.data;
+
+      if (!token) {
+        setAlerta({
+          id: Date.now(),
+          titulo: "Error",
+          mensaje: message || "Error al iniciar sesión",
+          tipoAlerta: "error",
+        });
+        return false;
+      }
 
       localStorage.setItem("token", token);
-      console.log("Usuario autenticado con éxito");
+
+      setAlerta({
+        id: Date.now(),
+        titulo: "Éxito",
+        mensaje: "Inicio de sesión exitoso",
+        tipoAlerta: "success",
+      });
 
       goToDashboard();
+      return true;
     } catch (error: any) {
-      console.error("Error en login:", error.response?.data);
+      setAlerta({
+        id: Date.now(),
+        titulo: "Error",
+        mensaje: error.response?.data?.message || "Ocurrió un error interno",
+        tipoAlerta: "error",
+      });
+      return false;
     }
   };
 
@@ -40,5 +80,6 @@ export const useAuthLogin = () => {
     userDataLogin,
     handleChange,
     handleSubmit,
+    alerta,
   };
 };
