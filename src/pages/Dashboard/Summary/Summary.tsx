@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box } from "@mui/material";
 import HistoryTable from "../../../components/HistoryTable/HistoryTable";
 import TopCoins from "./components/TopCoins/TopCoins";
@@ -6,7 +6,17 @@ import CryptoChart from "../../../components/Charts/Area/AreaChart";
 import CardAds from "../../../components/CardAds/CardAds";
 import ImgCard from "../../../../public/assets/imgs/img1.png";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { useSummary } from "../../../hooks/useSummary";
 const Summary = () => {
+
+  const { getMainCoinsLiveData, getSecondaryCoinsLiveData } = useSummary();
+  useEffect(() => {
+//pruebe individualemnte por si acaso :)
+    getMainCoinsLiveData();
+    getSecondaryCoinsLiveData();
+  }, []);
+  
+  //getSecondaryCoinsLiveData()
   const coinHistoryData = [
     {
       id: 1,
