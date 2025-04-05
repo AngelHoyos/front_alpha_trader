@@ -2,7 +2,6 @@ import React from "react";
 import "./styled-components/style-login.css";
 import videoFondo from "../../../public/assets/video/fondo_register.mp4";
 import { motion } from "motion/react";
-// import logo from "../../../public/assets/imgs/logo/logo_alpha.png";
 import InputCustom from "../../components/Input/InputCustom";
 import ButtonCutoms from "../../components/Button/ButtonCutoms";
 import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons";
@@ -64,15 +63,9 @@ const Login: React.FC = () => {
               value={userDataLogin.Email}
               onChange={handleChange}
               fullWidth
-              error={
-                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-                  userDataLogin.Email
-                )
-              }
+              error={!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userDataLogin.Email)}
               helperText={
-                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-                  userDataLogin.Email
-                )
+                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userDataLogin.Email)
                   ? "El correo es invalido"
                   : ""
               }
