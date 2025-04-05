@@ -1,67 +1,40 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Box,
   Paper,
   Typography,
-  TextField,
   IconButton,
   Divider,
   Stack,
+  Alert,
+  CircularProgress,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+  TextareaAutosize,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import EditIcon from "@mui/icons-material/Edit";
-import SaveIcon from "@mui/icons-material/Save";
-
-interface Message {
-  sender: "user" | "ai";
-  text: string;
-}
-
+import useAlphaX from "../../../hooks/useAlphaX";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFloppyDisk, faPen, faXmark } from "@fortawesome/free-solid-svg-icons";
+import TextField from "@mui/material/TextField";
 const AlphaX: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    { sender: "ai", text: "Hola 👋 ¿En qué puedo ayudarte hoy?" },
-  ]);
-  const [input, setInput] = useState("");
-  const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [editText, setEditText] = useState("");
-
-  const handleSend = () => {
-    const trimmed = input.trim();
-    if (!trimmed) return;
-
-    const newMessages = [...messages, { sender: "user", text: trimmed }];
-    setMessages(newMessages);
-    setInput("");
-
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        {
-          sender: "ai",
-          text: "Esta es una respuesta generada por IA ✨",
-        },
-      ]);
-    }, 1000);
-  };
-
-  const handleEdit = (index: number, currentText: string) => {
-    setEditIndex(index);
-    setEditText(currentText);
-  };
-
-  const handleSaveEdit = () => {
-    if (editIndex === null) return;
-
-    const updatedMessages = [...messages];
-    updatedMessages[editIndex] = {
-      ...updatedMessages[editIndex],
-      text: editText,
-    };
-
-    setMessages(updatedMessages);
-    setEditIndex(null);
-    setEditText("");
-  };
+  const {
+    messages,
+    input,
+    editIndex,
+    editText,
+    loading,
+    error,
+    setInput,
+    handleSend,
+    handleEdit,
+    handleSaveEdit,
+    handleCancelEdit,
+    setEditText,
+    setError,
+  } = useAlphaX();
 
   return (
     <Box
@@ -73,6 +46,16 @@ const AlphaX: React.FC = () => {
         bgcolor: "transparent",
       }}
     >
+      {error && (
+        <Alert
+          severity="error"
+          onClose={() => setError(null)}
+          sx={{ mx: 2, mt: 2 }}
+        >
+          {error}
+        </Alert>
+      )}
+
       <Paper
         elevation={0}
         sx={{
@@ -95,45 +78,84 @@ const AlphaX: React.FC = () => {
           >
             <Box
               sx={{
-                p: 1.5,
-                borderRadius: 2,
                 maxWidth: "75%",
-                bgcolor: msg.sender === "user" ? "#3f51b5" : "#e0e0e0",
-                color: msg.sender === "user" ? "#fff" : "#000",
                 position: "relative",
               }}
             >
               {editIndex === i ? (
-                <Stack direction="row" spacing={1}>
-                  <TextField
-                    size="small"
-                    value={editText}
-                    onChange={(e) => setEditText(e.target.value)}
-                    fullWidth
-                    variant="outlined"
-                    sx={{
-                      input: {
+                <Card
+                  variant="outlined"
+                  sx={{
+                    bgcolor: msg.sender === "user" ? "#3f51b5" : "#e0e0e0",
+                    color: msg.sender === "user" ? "#fff" : "#000",
+                    borderRadius: 2,
+                  }}
+                >
+                  <CardContent sx={{ p: 1 }}>
+                    <TextareaAutosize
+                      minRows={3}
+                      value={editText}
+                      onChange={(e) => setEditText(e.target.value)}
+                      style={{
+                        width: "100%",
+                        backgroundColor: "transparent",
+                        border: "1px solid #ccc",
+                        borderRadius: 6,
+                        padding: 8,
                         color: msg.sender === "user" ? "#fff" : "#000",
-                      },
-                    }}
-                  />
-                  <IconButton onClick={handleSaveEdit} color="success">
-                    <SaveIcon fontSize="small" />
-                  </IconButton>
-                </Stack>
-              ) : (
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Typography variant="body2">{msg.text}</Typography>
-                  {msg.sender === "user" && (
-                    <IconButton
-                      onClick={() => handleEdit(i, msg.text)}
+                        resize: "none",
+                        fontFamily: "inherit",
+                        fontSize: "0.9rem",
+                      }}
+                    />
+                  </CardContent>
+                  <CardActions sx={{ justifyContent: "flex-end", pr: 2 }}>
+                    <Button
+                      onClick={handleCancelEdit}
+                      startIcon={<FontAwesomeIcon icon={faXmark} />}
+                      color="error"
                       size="small"
-                      sx={{ color: "#fff" }}
                     >
-                      <EditIcon fontSize="small" />
-                    </IconButton>
-                  )}
-                </Stack>
+                      Cancelar
+                    </Button>
+                    <Button
+                      onClick={handleSaveEdit}
+                      startIcon={<FontAwesomeIcon icon={faFloppyDisk} />}
+                      color="success"
+                      size="small"
+                    >
+                      Guardar
+                    </Button>
+                  </CardActions>
+                </Card>
+              ) : (
+                <Box
+                  sx={{
+                    p: 1.5,
+                    borderRadius: 2,
+                    bgcolor: msg.sender === "user" ? "#3f51b5" : "#e0e0e0",
+                    color: msg.sender === "user" ? "#fff" : "#000",
+                  }}
+                >
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <Typography variant="body2">{msg.text}</Typography>
+                    {msg.sender === "user" && (
+                      <IconButton
+                        onClick={() => handleEdit(i, msg.text)}
+                        size="small"
+                        sx={{
+                          color: "#90caf9",
+                          "&:hover": {
+                            color: "#1976d2",
+                          },
+                          cursor: "pointer",
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faPen} size="sm" />
+                      </IconButton>
+                    )}
+                  </Stack>
+                </Box>
               )}
             </Box>
           </Box>
@@ -149,6 +171,7 @@ const AlphaX: React.FC = () => {
             placeholder="Escribe tu mensaje..."
             fullWidth
             value={input}
+            disabled={loading}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             sx={{
@@ -171,8 +194,16 @@ const AlphaX: React.FC = () => {
             InputLabelProps={{ style: { color: "white" } }}
           />
 
-          <IconButton color="primary" onClick={handleSend}>
-            <SendIcon />
+          <IconButton
+            color="primary"
+            onClick={handleSend}
+            disabled={loading || input.trim() === ""}
+          >
+            {loading ? (
+              <CircularProgress size={20} color="inherit" />
+            ) : (
+              <SendIcon />
+            )}
           </IconButton>
         </Stack>
       </Box>
