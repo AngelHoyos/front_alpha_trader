@@ -1,4 +1,3 @@
-import { width } from './../../../../node_modules/@mui/system/sizing/sizing.d';
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 

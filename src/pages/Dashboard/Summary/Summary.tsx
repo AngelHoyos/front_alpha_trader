@@ -1,4 +1,3 @@
-import React from "react";
 import { Box } from "@mui/material";
 import HistoryTable from "../../../components/HistoryTable/HistoryTable";
 import TopCoins from "./components/TopCoins/TopCoins";
@@ -42,13 +41,17 @@ const Summary = () => {
     },
   ];
 
-  const generateCryptoData = (initialPrice, variations, volatility) => {
+  const generateCryptoData = (
+    initialPrice: number,
+    variations: string[],
+    volatility: number
+  ) => {
     let price = initialPrice;
-    return variations.map((time, index) => {
-      // Genera una variación aleatoria positiva o negativa
-      const change = (Math.random() * volatility * 2 - volatility).toFixed(2);
-      price = Math.max(40000, price + parseFloat(change)); // Asegura que no baje de 40,000
-      return { time, price };
+    return variations.map((time) => {
+      // Genera una variación aleatoria dentro del rango de volatilidad
+      const change = Math.random() * volatility * 2 - volatility;
+      price = Math.max(40000, price + change); // Asegura que no baje de 40,000
+      return { time, price: parseFloat(price.toFixed(2)) }; // Redondear a 2 decimales
     });
   };
 
@@ -151,7 +154,6 @@ const Summary = () => {
       iconEstado: faArrowUp,
       valor: 3.5,
     },
-    
   ];
 
   return (
@@ -160,35 +162,37 @@ const Summary = () => {
         width: "100%",
         display: "flex",
         flexDirection: "row",
-        gap: 2, 
-        px: 2, 
-        
+        gap: 2,
+        px: 2,
       }}
     >
       {/* Contenedor Principal (Gráficos y Tabla) */}
       <Box
         sx={{
-          flex: 3, 
+          flex: 3,
           display: "flex",
           flexDirection: "column",
-          gap: 3, 
+          gap: 3,
         }}
       >
-        <CryptoChart title="Análisis" data={cryptoData} />
+        <CryptoChart
+          title="Analisis"
+          data={cryptoData}
+        />
         <HistoryTable data={coinHistoryData} />
       </Box>
 
       {/* Barra Lateral */}
       <Box
         sx={{
-          flex: 1, 
+          flex: 1,
           display: "flex",
           flexDirection: "column",
-          gap: 2, 
+          gap: 2,
         }}
       >
         <CardAds img={ImgCard} title="Potencia tu inversión con Alpha X" />
-        <TopCoins coinsData={dummyCoins}/>
+        <TopCoins coinsData={dummyCoins} />
       </Box>
     </Box>
   );

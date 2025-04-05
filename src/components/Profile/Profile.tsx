@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Box, Tabs, Tab, Snackbar, Alert } from "@mui/material";
+import { Box, Snackbar, Alert } from "@mui/material";
 import { useProfile } from "../../hooks/useProfile";
 import { StyledTab, StyledTabs } from "./styled-component/Profile.styled";
 import ProfileInfo from "./components/ProfileInfo/ProfileInfo";
 import AccountStatus from "./components/AccountStatus/AccountStatus";
 import RecentActivity from "./components/RecentActivity/RecentActivity";
-import { Description } from "@mui/icons-material";
 
 const Profile: React.FC = () => {
   const { userData, handleChange, message, setMessage, handleSave } =

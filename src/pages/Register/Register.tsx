@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, {useState } from "react";
 import "./style-register/style-register.css";
 import videoFondo from "../../../public/assets/video/fondo_register.mp4";
-import { motion } from "motion/react";
 import InputCustom from "../../components/Input/InputCustom";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import ButtonCutoms from "../../components/Button/ButtonCutoms";
-import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import ModalTermsConditions from "../../components/Modals/ModalTermsConditions/ModalTermsConditions";
 import { useNavigates } from "../../hooks/useNavigates";
 import Alerts from "../../components/Alerts/Alerts";
 import { useCreateRegister } from "../../hooks/useCreateRegister";
+import { motion } from "framer-motion";
+import { ButtonCustomLoad } from "../../components/Button/ButtonCustomLoad";
 
 export const Register: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,11 +23,9 @@ export const Register: React.FC = () => {
     alerta,
     userData,
     acceptedTerms,
+    handleSubmitGoogle,
   } = useCreateRegister();
 
-  const hanldeButton = () => {
-    console.log("hola");
-  };
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -86,6 +85,7 @@ export const Register: React.FC = () => {
             />
           </div>
         </motion.div>
+
         <motion.div
           variants={itemsVariants}
           className="w-1/2 h-full flex items-center justify-center flex-col"
@@ -98,43 +98,45 @@ export const Register: React.FC = () => {
               Bienvenido a Alpha Trader
             </p>
           </div>
-          <div className="w-full flex justify-center items-center mt-10  flex-col">
-            <div className="w-[80%] grid grid-cols-2 gap-x-6 gap-y-12 ">
+
+          <div className="w-full flex justify-center items-center mt-10 flex-col">
+            <div className="w-[80%] grid grid-cols-2 gap-x-6 gap-y-12">
+              {/* Inputs */}
               <InputCustom
                 label="Nombre"
-                name="nombre"
+                name="FullName"
                 type="text"
-                value={userData.nombre}
+                value={userData.FullName}
                 onChange={handleChange}
                 fullWidth={false}
               />
-
               <InputCustom
                 label="Correo Electrónico"
-                name="correo_electronico"
+                name="Email"
                 type="text"
-                value={userData.correo_electronico}
+                value={userData.Email}
                 onChange={handleChange}
                 fullWidth
                 error={
+                  userData.Email !== "" &&
                   !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-                    userData.correo_electronico
+                    userData.Email
                   )
                 }
                 helperText={
+                  userData.Email !== "" &&
                   !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-                    userData.correo_electronico
+                    userData.Email
                   )
-                    ? "El correo es invalido"
+                    ? "El correo es inválido"
                     : ""
                 }
               />
-
               <InputCustom
                 label="Fecha de Nacimiento"
-                name="fecha_nacimiento"
+                name="DateOfBirth"
                 type="date"
-                value={userData.fecha_nacimiento}
+                value={userData.DateOfBirth}
                 onChange={handleChange}
                 fullWidth={false}
                 InputLabelProps={true}
@@ -147,32 +149,28 @@ export const Register: React.FC = () => {
                 onChange={handleChange}
                 fullWidth={false}
               />
-
               <InputCustom
                 label="Contraseña"
-                name="contraseña"
+                name="Password"
                 type="password"
-                value={userData.contraseña}
+                value={userData.Password}
                 onChange={handleChange}
                 fullWidth
                 error={
-                  userData.contraseña.length > 0 &&
-                  (userData.contraseña.length < 8 ||
-                    !/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\.])[A-Za-z\d!@#$%^&*\.]{8,}/.test(
-                      userData.contraseña
-                    ))
+                  userData.Password.length > 0 &&
+                  !/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\.])/.test(
+                    userData.Password
+                  )
                 }
                 helperText={
-                  userData.contraseña.length > 0 &&
-                  (userData.contraseña.length < 8 ||
-                    !/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\.])[A-Za-z\d!@#$%^&*\.]{8,}/.test(
-                      userData.contraseña
-                    ))
+                  userData.Password.length > 0 &&
+                  !/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\.])/.test(
+                    userData.Password
+                  )
                     ? "Debe tener 8 caracteres, mayúscula, minúscula, número y símbolo."
                     : ""
                 }
               />
-
               <InputCustom
                 label="Confirmar Contraseña"
                 name="confirmar_contraseña"
@@ -180,18 +178,39 @@ export const Register: React.FC = () => {
                 value={confirmarContraseña}
                 onChange={handleChange}
                 fullWidth={false}
+                error={
+                  confirmarContraseña.length > 0 &&
+                  confirmarContraseña !== userData.Password
+                }
+                helperText={
+                  confirmarContraseña.length > 0 &&
+                  confirmarContraseña !== userData.Password
+                    ? "Las contraseñas no coinciden"
+                    : ""
+                }
               />
             </div>
+
+            {/* Términos */}
             <FormControlLabel
-              control={<Checkbox color="info" checked={acceptedTerms} />}
+              control={
+                <Checkbox
+                  color="info"
+                  checked={acceptedTerms}
+                  sx={{
+                    color: "white",
+                    "&.Mui-checked": {
+                      color: "blue-500",
+                    },
+                  }}
+                />
+              }
               label={
-                <span
-                  className="underline cursor-pointer text-blue-500"
-                  onClick={() => setIsModalOpen(true)}
-                >
-                  Acepta terminos y Condiciones
+                <span className="underline cursor-pointer text-blue-500">
+                  Acepta términos y condiciones
                 </span>
               }
+              onClick={() => setIsModalOpen(true)}
               className="mt-5"
             />
             <ModalTermsConditions
@@ -199,22 +218,19 @@ export const Register: React.FC = () => {
               onClose={() => setIsModalOpen(false)}
               onAccept={handleAcceptTerms}
             />
-            <ButtonCutoms
-              text="Crear Registro"
+
+            <ButtonCustomLoad
               onClick={handleSubmit}
-              className="w-[25%] mt-5!"
-            />
+              sx={{ width:'20%' }}
+            >
+              Crear Registro
+            </ButtonCustomLoad>
+
             <div className="flex flex-row w-full items-center justify-center mt-5 gap-x-5">
               <ButtonCutoms
                 text=""
-                onClick={hanldeButton}
+                onClick={handleSubmitGoogle}
                 icon={faGoogle}
-                className="w-12 h-12 "
-              />
-              <ButtonCutoms
-                text=""
-                onClick={hanldeButton}
-                icon={faFacebookF}
                 className="w-12 h-12"
               />
             </div>

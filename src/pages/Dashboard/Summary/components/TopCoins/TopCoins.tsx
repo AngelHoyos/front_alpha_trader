@@ -1,8 +1,7 @@
 import React from "react";
 import { Card, Typography, Box } from "@mui/material";
-import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {TopCoinsProps, Coin} from "../../../../../models/TopCoins";
+import {TopCoinsProps} from "../../../../../models/TopCoins";
 const TopCoins: React.FC<TopCoinsProps> = ({ coinsData }) => {
   return (
     <Card

@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { DataUser } from "../models/DataUserRegister.model";
-import { closeLoading, Loading } from "../components/Alerts/Loading";
 
 export const useProfile = () => {
   const [userData, setUserData] = useState<DataUser>({
-    nombre: "Juan Hernández",
-    correo_electronico: "jh746509@gmail.com",
-    fecha_nacimiento: "2005-10-10",
+    FullName: "Juan Hernández",
+    Email: "jh746509@gmail.com",
+    DateOfBirth: "2005-10-10",
     telefono: "3112506998",
-    contraseña: "123456789.As",
+    Password: "123456789.As",
   });
   const [message, setMessage] = useState({ text: "", type: "" });
 
