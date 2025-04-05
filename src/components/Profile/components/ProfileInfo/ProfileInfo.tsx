@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Avatar, Button, Grid, Card, CardContent } from "@mui/material";
+import { Box, Avatar, Button, Grid, Card, CardContent } from "@mui/material";
 import InputCustom from "../../../Input/InputCustom";
 import { ButtonCustomLoad } from "../../../Button/ButtonCustomLoad";
 import { ProfileInfoProps } from "../../../../models/Profile.model";
@@ -54,8 +54,8 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ userData, handleSave, handleC
             <Grid item xs={12} sm={6}>
               <InputCustom
                 label="Nombre"
-                name="nombre"
-                value={userData.nombre}
+                name="FullName"
+                value={userData.FullName}
                 onChange={handleChange}
                 fullWidth
               />
@@ -63,15 +63,15 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ userData, handleSave, handleC
             <Grid item xs={12} sm={6}>
               <InputCustom
                 label="Correo Electrónico"
-                name="correo_electronico"
-                value={userData.correo_electronico}
+                name="Email"
+                value={userData.Email}
                 onChange={handleChange}
                 fullWidth
                 error={
-                  !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.correo_electronico)
+                  !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.Email)
                 }
                 helperText={
-                  !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.correo_electronico)
+                  !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.Email)
                     ? "El correo es invalido"
                     : ""
                 }
@@ -80,9 +80,9 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ userData, handleSave, handleC
             <Grid item xs={12} sm={6}>
               <InputCustom
                 label="Fecha de Nacimiento"
-                name="fecha_nacimiento"
+                name="DateOfBirth"
                 type="date"
-                value={userData.fecha_nacimiento}
+                value={userData.DateOfBirth}
                 onChange={handleChange}
                 fullWidth
               />
@@ -99,23 +99,23 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ userData, handleSave, handleC
             <Grid item xs={12} sm={6}>
               <InputCustom
                 label="Contraseña"
-                name="contraseña"
+                name="Password"
                 type="password"
-                value={userData.contraseña}
+                value={userData.Password}
                 onChange={handleChange}
                 fullWidth
                 error={
-                  userData.contraseña.length > 0 &&
-                  (userData.contraseña.length < 8 ||
+                  userData.Password.length > 0 &&
+                  (userData.Password.length < 8 ||
                     !/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\.])[A-Za-z\d!@#$%^&*\.]{8,}/.test(
-                      userData.contraseña
+                      userData.Password
                     ))
                 }
                 helperText={
-                  userData.contraseña.length > 0 &&
-                  (userData.contraseña.length < 8 ||
+                  userData.Password.length > 0 &&
+                  (userData.Password.length < 8 ||
                     !/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*\.])[A-Za-z\d!@#$%^&*\.]{8,}/.test(
-                      userData.contraseña
+                      userData.Password
                     ))
                     ? "Debe tener 8 caracteres, mayúscula, minúscula, número y símbolo."
                     : ""

@@ -1,4 +1,3 @@
-import React from "react";
 import { Box } from "@mui/material";
 import HistoryTable from "../../../components/HistoryTable/HistoryTable";
 import TopCoins from "./components/TopCoins/TopCoins";

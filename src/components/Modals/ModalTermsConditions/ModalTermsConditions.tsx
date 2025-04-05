@@ -1,4 +1,4 @@
-import { Modal, Box, Typography, Backdrop, Fade } from "@mui/material";
+import { Modal, Box, Typography, Fade } from "@mui/material";
 import React from "react";
 import ButtonCutoms from "../../Button/ButtonCutoms";
 import { TermsModalProps } from "../../../models/TermsConditions.model";

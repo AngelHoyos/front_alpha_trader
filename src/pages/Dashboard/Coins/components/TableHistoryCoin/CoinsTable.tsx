@@ -15,7 +15,7 @@ import { useNavigates } from "../../../../../hooks/useNavigates";
 import { CoinsTableProps } from "../../../../../models/Coins.model";
 
 const CoinsTable: React.FC<CoinsTableProps> = ({ coins, show }) => {
-  const [timeframe, setTimeframe] = useState("24h");
+  const [timeframe, setTimeframe] = useState<"1h" | "24h" | "7d">("24h");
   const { goTo } = useNavigates();
 
   const headers = show
@@ -46,7 +46,7 @@ const CoinsTable: React.FC<CoinsTableProps> = ({ coins, show }) => {
                     Volumen en{" "}
                     <Select
                       value={timeframe}
-                      onChange={(e) => setTimeframe(e.target.value)}
+                      onChange={(e) => setTimeframe(e.target.value as "1h" | "24h" | "7d")}
                       sx={{
                         color: "white",
                         border: "none",

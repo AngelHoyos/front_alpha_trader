@@ -1,8 +1,8 @@
 export interface DataUser{
     avatar?: string;
-    nombre: string;
-    correo_electronico: string;
-    fecha_nacimiento:string|Date;
+    FullName: string;
+    Email: string;
+    DateOfBirth:string|Date;
     telefono: string;
-    contraseña: string;
+    Password: string;
 }

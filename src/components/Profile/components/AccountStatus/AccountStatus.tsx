@@ -12,7 +12,6 @@ import {
   Card,
   CardContent,
   Grid,
-  Divider,
 } from "@mui/material";
 import {
   TrendingUp,

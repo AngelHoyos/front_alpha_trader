@@ -1,5 +1,4 @@
 import { Box, Typography } from "@mui/material";
-import React from "react";
 import PopularCoins from "./components/PopularCoins/PopularCoins";
 import MostProminentCurrency from "./components/MostProminentCurrency/MostProminentCurrency";
 import LessProminentCurrency from "./components/LessProminentCurrency/LessProminentCurrency";

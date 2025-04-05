@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import FixedDrawer from "../../components/FixedDrawer/FixedDrawer";
 import { Box, Button } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,7 +16,6 @@ const Dashboard = () => {
     { title: "Actualización", message: "Se ha actualizado tu perfil." },
   ]);
 
-  const handleClose = () => setOpen(false);
   const handleRemoveNotification = (index: number) => {
     setNotifications(notifications.filter((_, i) => i !== index));
   };

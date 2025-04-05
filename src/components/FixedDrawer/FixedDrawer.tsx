@@ -4,23 +4,14 @@ import {
   StyledDrawer,
   StyledListItem,
 } from "./styled-component/FixedDrawe.style";
-import {
-  Avatar,
-  Box,
-  List,
-  ListItemText,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, List, ListItemText, Typography } from "@mui/material";
 import {
   faHouse,
   faMagnifyingGlassChart,
-  faMoon,
   faRightFromBracket,
-  faWallet,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { faBitcoin } from "@fortawesome/free-brands-svg-icons";
 import { useNavigates } from "../../hooks/useNavigates";
 import { MenuItem } from "../../models/MenuFixedDrawer..model";
@@ -86,7 +77,7 @@ const FixedDrawer: React.FC = () => {
             {menuItems.map((item) => (
               <StyledListItem
                 key={item.text}
-                component={Link}
+                component={RouterLink}
                 to={"/dashboard" + item.path}
                 sx={{ paddingLeft: "12px", cursor: "pointer" }}
               >

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import {
   Card,
   CardContent,
@@ -12,7 +12,7 @@ const CryptoConverter = () => {
   const [fromCurrency, setFromCurrency] = useState<string>("btc");
   const [toCurrency, setToCurrency] = useState<string>("usd");
   const [amount, setAmount] = useState<string>("0.051244");
-  const [convertedAmount, setConvertedAmount] = useState<string>("34,900");
+  const [convertedAmount] = useState<string>("34,900");
 
   return (
     <Card
