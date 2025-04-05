@@ -1,8 +1,12 @@
-import { DataUserLogin } from "./../models/DataUserLogin.model";
 import { useState } from "react";
 import axiosInstance from "../api/axiosInstance/axiosInstance";
 import { useNavigates } from "./useNavigates";
+import { DataUserLogin } from "../models/DataUserLogin.model";
 
+interface ResponseToken {
+  token: string;
+  message?: string;
+}
 
 export const useAuthLogin = () => {
   const [userDataLogin, setUserDataLogin] = useState<DataUserLogin>({
@@ -12,7 +16,6 @@ export const useAuthLogin = () => {
 
   const { goToDashboard } = useNavigates();
 
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserDataLogin((prev) => ({ ...prev, [name]: value }));
@@ -20,7 +23,7 @@ export const useAuthLogin = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axiosInstance.post("/auth/login", {
+      const response = await axiosInstance.post<ResponseToken>("/auth/login", {
         Email: userDataLogin.correo_electronico,
         Password: userDataLogin.contraseña,
       });
@@ -30,10 +33,15 @@ export const useAuthLogin = () => {
       localStorage.setItem("token", token);
       console.log("Usuario autenticado con éxito");
 
-      goToDashboard();     } catch (error: any) {
-      console.error("Error en login:", error.response?.data );
+      goToDashboard();
+    } catch (error: any) {
+      console.error("Error en login:", error.response?.data);
     }
   };
-   return {userDataLogin, handleChange, handleSubmit};
-};
 
+  return {
+    userDataLogin,
+    handleChange,
+    handleSubmit,
+  };
+};

@@ -4,6 +4,7 @@ import { AlertCustomProps } from "../models/AlertCustom";
 import { closeLoading, Loading } from "../components/Alerts/Loading";
 import { useNavigates } from "./useNavigates";
 import axiosInstance from "../api/axiosInstance/axiosInstance";
+import { ResponseToken } from "../models/ResponseToken";
 
 
 export const useCreateRegister = () => {
@@ -70,7 +71,7 @@ export const useCreateRegister = () => {
     Loading("Registrando usuario...");
   
     try {
-      const response = await axiosInstance.post("/user/register", {
+      const response = await axiosInstance.post<ResponseToken>("/user/register", {
         Email: userData.correo_electronico,
         Password: userData.contraseña,
         FullName: userData.nombre,
@@ -81,9 +82,17 @@ export const useCreateRegister = () => {
   
       closeLoading();
   
-      const { token } = response.data;
+      if (!response.data.token) {
+        setAlerta({
+          id: Date.now(),
+          titulo: "Error",
+          mensaje: response.data.message || "Error desconocido",
+          tipoAlerta: "error",
+        });
+        return;
+      }
   
-      localStorage.setItem("token", token);
+      localStorage.setItem("token", response.data.token);
   
       setAlerta({
         id: Date.now(),
@@ -95,7 +104,6 @@ export const useCreateRegister = () => {
       goToDashboard();
     } catch (error: any) {
       closeLoading();
-  console.log(error.response?.data);
   
       setAlerta({
         id: Date.now(),
@@ -105,6 +113,7 @@ export const useCreateRegister = () => {
       });
     }
   };
+  
 
   const handleAcceptTerms = () => {
     setAcceptedTerms(true);
