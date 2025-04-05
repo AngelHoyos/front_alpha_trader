@@ -14,11 +14,7 @@ const ModalTermsConditions: React.FC<TermsModalProps> = ({
   };
 
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      closeAfterTransition
-    >
+    <Modal open={open} onClose={onClose} closeAfterTransition>
       <Fade in={open} timeout={500}>
         <Box className="bg-[#000317] p-6 rounded-lg w-[50%] mx-auto mt-20 max-h-[80%] flex flex-col">
           <Typography
@@ -29,9 +25,8 @@ const ModalTermsConditions: React.FC<TermsModalProps> = ({
             Términos y Condiciones
           </Typography>
 
-          {/* Contenedor con scroll solo para el contenido */}
           <Box sx={{ maxHeight: "60vh", overflowY: "auto", pr: 2 }}>
-            <Typography variant="body2" sx={{ mb: 4 }}>
+            <Typography variant="body2" sx={{ mb: 2 }}>
               <strong>1. Introducción</strong>
               <br />
               Bienvenido a <strong>Alpha Trader</strong>, una plataforma que
@@ -42,7 +37,7 @@ const ModalTermsConditions: React.FC<TermsModalProps> = ({
               Uso.
             </Typography>
 
-            <Typography variant="body2" sx={{ mb: 4 }}>
+            <Typography variant="body2" sx={{ mb: 2 }}>
               <strong>2. Naturaleza del Servicio</strong>
               <br />
               La Aplicación ofrece información y consejos basados en algoritmos
@@ -50,68 +45,88 @@ const ModalTermsConditions: React.FC<TermsModalProps> = ({
               <strong>
                 NO somos una entidad financiera ni ofrecemos asesoramiento de
                 inversión personalizado.
-              </strong>
+              </strong>{" "}
               La información proporcionada es de carácter informativo y
               educativo.
             </Typography>
 
-            <Typography variant="body2" sx={{ mb: 4 }}>
+            <Typography variant="body2" sx={{ mb: 1 }}>
               <strong>3. Responsabilidad del Usuario</strong>
               <br />
               El usuario reconoce y acepta que:
-              <ul style={{ paddingLeft: "20px", marginTop: "8px" }}>
-                <li>
+            </Typography>
+            <ul style={{ paddingLeft: "20px", marginBottom: "1.5rem" }}>
+              <li>
+                <Typography variant="body2">
                   Todas las decisiones de inversión son bajo su propio riesgo.
-                </li>
-                <li>
+                </Typography>
+              </li>
+              <li>
+                <Typography variant="body2">
                   Debe realizar su propia investigación y, si es necesario,
                   consultar con un asesor financiero antes de tomar decisiones.
-                </li>
-                <li>
+                </Typography>
+              </li>
+              <li>
+                <Typography variant="body2">
                   La Aplicación no garantiza resultados ni rendimientos
                   específicos en ninguna inversión.
-                </li>
-              </ul>
-            </Typography>
+                </Typography>
+              </li>
+            </ul>
 
-            <Typography variant="body2" sx={{ mb: 4 }}>
+            <Typography variant="body2" sx={{ mb: 1 }}>
               <strong>4. Exclusión de Responsabilidad</strong>
               <br />
               Alpha Trader y su equipo <strong>NO</strong> se hacen responsables
               de:
-              <ul style={{ paddingLeft: "20px", marginTop: "8px" }}>
-                <li>
+            </Typography>
+            <ul style={{ paddingLeft: "20px", marginBottom: "1.5rem" }}>
+              <li>
+                <Typography variant="body2">
                   Pérdidas financieras resultantes del uso de la información
                   proporcionada por la Aplicación.
-                </li>
-                <li>
+                </Typography>
+              </li>
+              <li>
+                <Typography variant="body2">
                   Cambios en el mercado, fluctuaciones de precios u otros
                   factores externos que afecten las inversiones.
-                </li>
-                <li>
+                </Typography>
+              </li>
+              <li>
+                <Typography variant="body2">
                   Errores en los datos proporcionados por la inteligencia
                   artificial.
-                </li>
-              </ul>
-            </Typography>
+                </Typography>
+              </li>
+            </ul>
 
-            <Typography variant="body2" sx={{ mb: 4 }}>
+            <Typography variant="body2" sx={{ mb: 1 }}>
               <strong>5. Uso Adecuado del Servicio</strong>
               <br />
               El usuario se compromete a:
-              <ul style={{ paddingLeft: "20px", marginTop: "8px" }}>
-                <li>No manipular ni hacer un uso indebido de la Aplicación.</li>
-                <li>
+            </Typography>
+            <ul style={{ paddingLeft: "20px", marginBottom: "1.5rem" }}>
+              <li>
+                <Typography variant="body2">
+                  No manipular ni hacer un uso indebido de la Aplicación.
+                </Typography>
+              </li>
+              <li>
+                <Typography variant="body2">
                   No utilizar la información para actividades ilegales o
                   fraudulentas.
-                </li>
-                <li>
+                </Typography>
+              </li>
+              <li>
+                <Typography variant="body2">
                   No distribuir ni reproducir el contenido sin autorización.
-                </li>
-              </ul>
-            </Typography>
+                </Typography>
+              </li>
+            </ul>
 
-            <Typography variant="body2" sx={{ mb: 4 }}>
+            <Typography variant="body2" sx={{ mb: 2 }}>
               <strong>6. Modificaciones y Terminación del Servicio</strong>
               <br />
               Nos reservamos el derecho de modificar o discontinuar la
@@ -120,7 +135,7 @@ const ModalTermsConditions: React.FC<TermsModalProps> = ({
               revisarlos periódicamente.
             </Typography>
 
-            <Typography variant="body2" sx={{ mb: 4 }}>
+            <Typography variant="body2" sx={{ mb: 2 }}>
               <strong>7. Legislación Aplicable</strong>
               <br />
               Estos Términos y Condiciones se rigen por las leyes del país en el
@@ -128,13 +143,13 @@ const ModalTermsConditions: React.FC<TermsModalProps> = ({
               resuelta en los tribunales competentes de dicha jurisdicción.
             </Typography>
 
-            <Typography variant="body2" sx={{ mb: 4 }}>
+            <Typography variant="body2" sx={{ mb: 2 }}>
               Al utilizar la Aplicación, confirmas que has leído, comprendido y
               aceptado estos Términos y Condiciones. Si no estás de acuerdo, por
               favor, no utilices nuestros servicios.
             </Typography>
 
-            <Typography variant="body2" sx={{ mb: 4 }}>
+            <Typography variant="body2" sx={{ mb: 2 }}>
               <strong>Contacto</strong>
               <br />
               Si tienes dudas o inquietudes, puedes comunicarte con nosotros a{" "}

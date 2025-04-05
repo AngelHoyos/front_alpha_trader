@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style-register/style-register.css";
 import videoFondo from "../../../public/assets/video/fondo_register.mp4";
-import { motion } from "motion/react";
 import InputCustom from "../../components/Input/InputCustom";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import ButtonCutoms from "../../components/Button/ButtonCutoms";
@@ -10,11 +9,13 @@ import ModalTermsConditions from "../../components/Modals/ModalTermsConditions/M
 import { useNavigates } from "../../hooks/useNavigates";
 import Alerts from "../../components/Alerts/Alerts";
 import { useCreateRegister } from "../../hooks/useCreateRegister";
+import { motion } from "framer-motion";
 
 export const Register: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { goToLogin } = useNavigates();
   const {
+    handleSubmitFacebook,
     handleAcceptTerms,
     handleSubmit,
     handleChange,
@@ -22,11 +23,9 @@ export const Register: React.FC = () => {
     alerta,
     userData,
     acceptedTerms,
+    handleSubmitGoogle,
   } = useCreateRegister();
 
-  const hanldeButton = () => {
-    console.log("hola");
-  };
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -117,15 +116,17 @@ export const Register: React.FC = () => {
                 onChange={handleChange}
                 fullWidth
                 error={
+                  userData.correo_electronico !== "" &&
                   !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
                     userData.correo_electronico
                   )
                 }
                 helperText={
+                  userData.correo_electronico !== "" &&
                   !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
                     userData.correo_electronico
                   )
-                    ? "El correo es invalido"
+                    ? "El correo es inválido"
                     : ""
                 }
               />
@@ -180,18 +181,37 @@ export const Register: React.FC = () => {
                 value={confirmarContraseña}
                 onChange={handleChange}
                 fullWidth={false}
+                error={
+                  confirmarContraseña.length > 0 &&
+                  confirmarContraseña !== userData.contraseña
+                }
+                helperText={
+                  confirmarContraseña.length > 0 &&
+                  confirmarContraseña !== userData.contraseña
+                    ? "Las contraseñas no coinciden"
+                    : ""
+                }
               />
             </div>
             <FormControlLabel
-              control={<Checkbox color="info" checked={acceptedTerms} />}
+              control={
+                <Checkbox
+                  color="info"
+                  checked={acceptedTerms}
+                  sx={{
+                    color: "white",
+                    "&.Mui-checked": {
+                      color: "blue-500",
+                    },
+                  }}
+                />
+              }
               label={
-                <span
-                  className="underline cursor-pointer text-blue-500"
-                  onClick={() => setIsModalOpen(true)}
-                >
+                <span className="underline cursor-pointer text-blue-500">
                   Acepta terminos y Condiciones
                 </span>
               }
+              onClick={() => setIsModalOpen(true)}
               className="mt-5"
             />
             <ModalTermsConditions
@@ -207,13 +227,13 @@ export const Register: React.FC = () => {
             <div className="flex flex-row w-full items-center justify-center mt-5 gap-x-5">
               <ButtonCutoms
                 text=""
-                onClick={hanldeButton}
+                onClick={handleSubmitGoogle}
                 icon={faGoogle}
                 className="w-12 h-12 "
               />
               <ButtonCutoms
                 text=""
-                onClick={hanldeButton}
+                onClick={handleSubmitFacebook}
                 icon={faFacebookF}
                 className="w-12 h-12"
               />
