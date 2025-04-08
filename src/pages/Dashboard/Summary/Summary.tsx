@@ -12,7 +12,7 @@ const Summary = () => {
   const { getMainCoinsLiveData, getSecondaryCoinsLiveData } = useSummary();
   useEffect(() => {
 //pruebe individualemnte por si acaso :)
-    getMainCoinsLiveData();
+    //getMainCoinsLiveData();
     getSecondaryCoinsLiveData();
   }, []);
   
