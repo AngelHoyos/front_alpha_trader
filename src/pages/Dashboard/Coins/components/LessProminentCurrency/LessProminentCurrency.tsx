@@ -80,7 +80,7 @@ const LessProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
           <List>
             {coins.slice(0, 3).map((coin) => (
               <ListItem
-                key={coin.name}
+                key={coin.binance_symbol}
                 sx={{
                   borderRadius: 2,
                   display: "flex",
@@ -92,20 +92,32 @@ const LessProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
                   px: 1,
                 }}
               >
-                <Typography variant="h5">{coin.icon}</Typography>
+                <img
+                  src={coin.image}
+                  alt={coin.name}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null; // evita loop infinito si la imagen por defecto también falla
+                    e.currentTarget.src =
+                      "https://via.placeholder.com/32?text=Coin"; // imagen por defecto
+                  }}
+                  style={{ width: 32, height: 32, borderRadius: 4 }}
+                />
                 <Typography variant="body1" sx={{ flex: 1, ml: 2 }}>
                   {coin.name}
                 </Typography>
-                <Typography variant="body2">{coin.price}</Typography>
+                <Typography variant="body2">{coin.current_price}</Typography>
                 <Typography
                   variant="body2"
                   sx={{
-                    color: coin.isPositive ? "#4CAF50" : "#E53935",
+                    color:
+                      coin.price_change_percentage_24h >= 0
+                        ? "#4CAF50"
+                        : "#E53935",
                     fontWeight: "bold",
                     ml: 2,
                   }}
                 >
-                  {coin.change}
+                  {coin.price_change_percentage_24h}%
                 </Typography>
               </ListItem>
             ))}
@@ -139,7 +151,7 @@ const LessProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
                 <FontAwesomeIcon icon={faTimes} />
               </IconButton>
             </Box>
-            
+
             {/* Contenedor con scroll */}
             <Box sx={contentStyles}>
               <List>
@@ -157,20 +169,34 @@ const LessProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
                       px: 1,
                     }}
                   >
-                    <Typography variant="h5">{coin.icon}</Typography>
+                    <img
+                      src={coin.image}
+                      alt={coin.name}
+                      onError={(e) => {
+                        e.currentTarget.onerror = null; // evita loop infinito si la imagen por defecto también falla
+                        e.currentTarget.src =
+                          "https://via.placeholder.com/32?text=Coin"; // imagen por defecto
+                      }}
+                      style={{ width: 32, height: 32, borderRadius: 4 }}
+                    />
                     <Typography variant="body1" sx={{ flex: 1, ml: 2 }}>
                       {coin.name}
                     </Typography>
-                    <Typography variant="body2">{coin.price}</Typography>
+                    <Typography variant="body2">
+                      {coin.current_price}
+                    </Typography>
                     <Typography
                       variant="body2"
                       sx={{
-                        color: coin.isPositive ? "#4CAF50" : "#E53935",
+                        color:
+                          coin.price_change_percentage_24h >= 0
+                            ? "#4CAF50"
+                            : "#E53935",
                         fontWeight: "bold",
                         ml: 2,
                       }}
                     >
-                      {coin.change}
+                      {coin.price_change_percentage_24h}%
                     </Typography>
                   </ListItem>
                 ))}

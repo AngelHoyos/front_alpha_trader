@@ -1,20 +1,16 @@
 import { useState } from "react";
-import axiosInstance from "../api/axiosInstance/axiosInstance";
 import { useNavigates } from "./useNavigates";
 import { DataUserLogin } from "../models/DataUserLogin.model";
 import { AlertCustomProps } from "../models/AlertCustom";
-
-interface ResponseToken {
-  token: string;
-  message?: string;
-}
+import { loginUser } from "../services/authService";
+import { useAuth } from "./useAuth";
 
 export const useAuthLogin = () => {
   const [userDataLogin, setUserDataLogin] = useState<DataUserLogin>({
     Email: "",
     Password: "",
   });
-
+  const { setToken } = useAuth();
   const [alerta, setAlerta] = useState<AlertCustomProps | null>(null);
   const { goToDashboard } = useNavigates();
 
@@ -37,12 +33,7 @@ export const useAuthLogin = () => {
     }
 
     try {
-      const response = await axiosInstance.post<ResponseToken>(
-        "/auth/login",
-        userDataLogin
-      );
-
-      const { token, message } = response.data;
+      const { token, message } = await loginUser(userDataLogin);
 
       if (!token) {
         setAlerta({
@@ -54,15 +45,7 @@ export const useAuthLogin = () => {
         return false;
       }
 
-      localStorage.setItem("token", token);
-
-      setAlerta({
-        id: Date.now(),
-        titulo: "Éxito",
-        mensaje: "Inicio de sesión exitoso",
-        tipoAlerta: "success",
-      });
-
+      setToken(token);
       goToDashboard();
       return true;
     } catch (error: any) {

@@ -5,4 +5,5 @@ export interface DataUser{
     DateOfBirth:string|Date;
     telefono: string;
     Password: string;
+    coinsList?: Array<string>;
 }

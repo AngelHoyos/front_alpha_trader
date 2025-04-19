@@ -28,14 +28,6 @@ export const useCreateRegister = () => {
     }
   };
 
-  const handleSubmitFacebook = async () => {
-    try {
-      window.location.href = "http://localhost:10101/auth/facebook";
-    } catch (error) {
-      console.error("Error al iniciar sesión con Facebook", error);
-    }
-  };
-
   const handleSubmitGoogle = () => {
     // Integración futura
   };
@@ -94,7 +86,7 @@ export const useCreateRegister = () => {
         return false;
       }
 
-      localStorage.setItem("token", response.data.token);
+      sessionStorage.setItem("token", response.data.token);
 
       setAlerta({
         id: Date.now(),
@@ -122,13 +114,12 @@ export const useCreateRegister = () => {
 
   return {
     handleSubmitGoogle,
-    handleSubmitFacebook,
-    handleAcceptTerms,
     handleSubmit,
     handleChange,
     confirmarContraseña,
     alerta,
     userData,
     acceptedTerms,
+    handleAcceptTerms
   };
 };
