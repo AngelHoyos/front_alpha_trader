@@ -37,7 +37,8 @@ export const useCreateRegister = () => {
   };
 
   const handleSubmitGoogle = () => {
-    // Integración futura
+    // Redirige al usuario a la ruta de autenticación de Google en tu backend
+    window.location.href = "http://localhost:10101/auth/google";
   };
 
   const handleSubmit = async (): Promise<boolean> => {

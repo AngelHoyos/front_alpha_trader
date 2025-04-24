@@ -9,6 +9,7 @@ import Coins from "./pages/Dashboard/Coins/Coins";
 import Profile from "./components/Profile/Profile";
 import CoinDetails from "./pages/Dashboard/Coins/components/CoinDetails/CoinDetails";
 import AlphaX from "./pages/Dashboard/AlphaX/AlphaX";
+import AuthGoogleSuccess from "./pages/AuthGoogleSuccess/AuthGoogleSuccess";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/auth/google/success" element={<AuthGoogleSuccess />} /> 
         <Route path="/dashboard" element={<Dashboard />}>
           <Route index element={<Summary />} />
           <Route path="summary" element={<Summary />} />
