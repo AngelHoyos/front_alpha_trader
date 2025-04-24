@@ -1,15 +1,22 @@
 import { Coins } from "../models/Coins.model";
+const priceHistory: Record<string, number[]> = {};
 
 export const mergeCoinsData = (
   originalData: Coins[],
   updates: Coins[]
 ): Coins[] => {
-  const updatedCoins: { [name: string]: Coins } = {};
+  const validUpdates = updates.filter((coin) => {
+    const price = Number(coin.Precio);
+    return coin.symboloBinance && !isNaN(price) && price > 0;
+  });
 
-  updates.forEach((coin) => {
-    const name = coin.symboloBinance?.toUpperCase();
-    if (name) {
-      updatedCoins[name] = coin;
+  const updatedCoins: Record<string, Coins> = {};
+
+  validUpdates.forEach((coin) => {
+    const symbol = coin.symboloBinance!.toUpperCase();
+
+    if (symbol) {
+      updatedCoins[symbol] = coin;
     }
   });
 
@@ -24,18 +31,25 @@ export const mergeCoinsData = (
 
     if (isNaN(updatedPrice) || updatedPrice <= 0) return coin;
 
+    const history = priceHistory[key] || [];
+    const newHistory = [...history.slice(-2), updatedPrice];
+    priceHistory[key] = newHistory;
+
+    const isStable =
+      newHistory.length === 3 &&
+      newHistory.every((p) => Math.abs(p - newHistory[0]) < 0.01);
+
     const percentageChange =
       previousPrice > 0
         ? ((updatedPrice - previousPrice) / previousPrice) * 100
         : 0;
 
-    const roundedPrice = Math.round(updatedPrice * 100) / 100;
-    const roundedChange = Math.round(percentageChange * 100) / 100;
-
     return {
       ...coin,
-      current_price: roundedPrice,
-      price_change_percentage_24h: roundedChange,
+      current_price: isStable
+        ? Math.round(updatedPrice * 100) / 100
+        : coin.current_price,
+      price_change_percentage_24h: Math.round(percentageChange * 100) / 100,
     };
   });
 };

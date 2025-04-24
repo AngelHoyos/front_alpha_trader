@@ -1,15 +1,17 @@
-import {  useRef } from "react";
+import { useRef } from "react";
 import { socketService } from "../services/SocketService";
 
-const SOCKET_URL = 'https://alphatrader.up.railway.app/';
+const SOCKET_URL = "https://alphatrader.up.railway.app/";
 
 export const useSocket = () => {
   const IsConnected = useRef(false);
   const connect = () => {
-    if (!IsConnected.current) {
-      socketService.connect(SOCKET_URL);
+    const token = sessionStorage.getItem("token");
+    if (!IsConnected.current && token) {
+      socketService.connect(SOCKET_URL, token);
       IsConnected.current = true;
     }
+    
   };
 
   const disconnect = () => {

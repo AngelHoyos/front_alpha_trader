@@ -35,7 +35,7 @@ const Dashboard = () => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          width: "87%",
+          width: "calc(100% - 50px)",
         }}
       >
         <Box
@@ -70,7 +70,7 @@ const Dashboard = () => {
             />
           </Box>
         </Box>
-        <Box sx={{ width: "100%", height: "89%", boxShadow:'none' }}>
+        <Box sx={{ width: "100%", height: "89%", boxShadow: "none" }}>
           <Outlet />
         </Box>
       </Box>

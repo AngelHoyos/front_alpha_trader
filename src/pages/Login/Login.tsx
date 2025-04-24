@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./styled-components/style-login.css";
 import videoFondo from "../../../public/assets/video/fondo_register.mp4";
 import { motion } from "motion/react";
@@ -9,10 +9,15 @@ import { useAuthLogin } from "../../hooks/useAuthLogin";
 import { useNavigates } from "../../hooks/useNavigates";
 import { ButtonCustomLoad } from "../../components/Button/ButtonCustomLoad";
 import Alerts from "../../components/Alerts/Alerts";
+import { Typography } from "@mui/material";
+import ModalEmailRecoveryPassword from "../../components/Modals/ModalEmailRecoveryPassword/ModalEmailRecoveryPassword";
 
 const Login: React.FC = () => {
   const { userDataLogin, handleChange, handleSubmit, alerta } = useAuthLogin();
   const { goToRegister } = useNavigates();
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -38,7 +43,7 @@ const Login: React.FC = () => {
   };
   return (
     <>
-          {alerta && <Alerts key={alerta.id} {...alerta} />}
+      {alerta && <Alerts key={alerta.id} {...alerta} />}
       <motion.section
         variants={containerVariants}
         initial="hidden"
@@ -58,7 +63,13 @@ const Login: React.FC = () => {
               Bienvenido a Alpha Trader
             </p>
           </div>
-          <div className="w-full flex justify-center items-center mt-10  flex-col">
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              await handleSubmit();
+            }}
+            className="w-full flex justify-center items-center mt-10  flex-col"
+          >
             <div className="w-[50%] grid grid-cols-1 gap-y-10 mb-7">
               <InputCustom
                 label="Correo Electrónico"
@@ -103,7 +114,23 @@ const Login: React.FC = () => {
                 }
               />
             </div>
-            <ButtonCustomLoad onClick={handleSubmit} sx={{ width: "20%" }}>
+            <Typography
+              variant="body2"
+              sx={{
+                color: "white",
+                cursor: "pointer",
+                mt: -2,
+                mb: 2,
+                alignSelf: "flex-end",
+                mr: "25%",
+                "&:hover": { textDecoration: "underline" },
+              }}
+              onClick={handleOpen}
+            >
+              Recuperar Contraseña
+            </Typography>
+
+            <ButtonCustomLoad sx={{ width: "20%" }} type="submit">
               Iniciar Sesión
             </ButtonCustomLoad>
             <div className="flex flex-row w-full items-center justify-center mt-5 gap-x-5">
@@ -114,7 +141,7 @@ const Login: React.FC = () => {
                 className="h-12"
               />
             </div>
-          </div>
+          </form>
         </motion.div>
         <motion.div
           variants={itemsVariants}
@@ -147,6 +174,10 @@ const Login: React.FC = () => {
           </div>
         </motion.div>
       </motion.section>
+      <ModalEmailRecoveryPassword
+        open={open}
+        onClose={handleClose}
+      />
     </>
   );
 };

@@ -1,5 +1,13 @@
 import React, { useEffect } from "react";
-import { Box, Snackbar, Alert, Button, Avatar, Typography } from "@mui/material";
+import {
+  Box,
+  Snackbar,
+  Alert,
+  Button,
+  Avatar,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
 import { useProfile } from "../../hooks/useProfile";
 import { StyledTab, StyledTabs } from "./styled-component/Profile.styled";
 import AccountStatus from "./components/AccountStatus/AccountStatus";
@@ -8,6 +16,8 @@ import CoinPreferences from "./components/CoinPreferences/CoinPreferences";
 import ProfileInfo from "./components/ProfileInfo/ProfileInfo";
 import { useAvailableCoinsProfile } from "../../hooks/useAvailableCoinsProfile";
 import AnimateSVG from "./components/AnimateSVG/AnimateSVG";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
 
 const Profile: React.FC = () => {
   const {
@@ -20,8 +30,8 @@ const Profile: React.FC = () => {
     handleCoinPreferencesChange,
     handleEditClick,
     handleCloseModal,
+    loading,
   } = useProfile();
-
   const [tabIndex, setTabIndex] = React.useState(0);
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
@@ -61,7 +71,20 @@ const Profile: React.FC = () => {
     { id: 2, description: "Ethereum", amount: 1200, result: "pérdida" },
     { id: 3, description: "Cardano", amount: 800, result: "ganancia" },
   ];
-
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
     <Box
       sx={{
@@ -74,10 +97,20 @@ const Profile: React.FC = () => {
         sx={{
           width: "100%",
           height: "250px",
-          position: "relative",
         }}
       >
         <AnimateSVG />
+      </Box>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          px: 4,
+          mt: -10,
+        }}
+      >
         <Box
           sx={{
             width: 220,
@@ -87,14 +120,13 @@ const Profile: React.FC = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            position: "absolute",
-            bottom: "-130px",
-            left: "70px",
+            position: "relative",
+            top: "-20px",
           }}
         >
           <Avatar
-            src="/ruta/de/imagen.jpg"
-            alt="Usuario"
+            src={userData?.profilePicture}
+            alt={userData?.FullName}
             variant="rounded"
             sx={{
               width: "100%",
@@ -104,38 +136,49 @@ const Profile: React.FC = () => {
               backgroundColor: "#fff",
             }}
           />
-          <Box>
-            <Typography variant="h3"> Juan Hernandez </Typography>
-          </Box>
         </Box>
-      </Box>
-      <Box
-        sx={{
-          p: 3,
-          pt: 10,
-          boxShadow: "0 3px 12px 10px rgba(255, 255, 255, 0.1)",
-        }}
-      >
-        <Box sx={{ width: "100%", mb: 4 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            marginLeft: "50px",
+          }}
+        >
+          <Typography variant="h4" sx={{ fontWeight: 600 }}>
+            {userData?.FullName}
+          </Typography>
           <Box
             sx={{
               borderRadius: 3,
-              p: 3,
-              width: "100%",
               boxShadow: 3,
+              marginLeft: "10px",
             }}
           >
             <Button
-              variant="contained"
-              color="primary"
               onClick={handleEditClick}
-              sx={{ mb: 2 }}
+              sx={{
+                mb: 2,
+                minWidth: 0,
+                width: 48,
+                height: 48,
+                borderRadius: "50%",
+                padding: 0,
+                color: "#fff",
+                "&:hover": {
+                  backgroundColor: "#5114A6",
+                },
+                "&:active": {
+                  boxShadow: "0 0 0 4px rgba(25, 118, 210, 0.3)",
+                },
+              }}
             >
-              Editar Información
+              <FontAwesomeIcon icon={faPen} />
             </Button>
           </Box>
         </Box>
-
+      </Box>
+      <Box>
         {/* Tabs */}
         <Box sx={{ mb: 4 }}>
           <StyledTabs value={tabIndex} onChange={handleTabChange} centered>
@@ -152,22 +195,22 @@ const Profile: React.FC = () => {
         {tabIndex === 1 && <RecentActivity transactions={userTransactions} />}
         {tabIndex === 2 && (
           <CoinPreferences
-            selectedCoins={userData.coinsList ?? []}
+            selectedCoins={userData?.coinsList ?? []}
             availableCoins={availableCoins}
             onChange={handleCoinPreferencesChange}
           />
         )}
 
-        {/* Modal de edición de perfil */}
-        <ProfileInfo
-          userData={userData}
-          handleSave={handleSave}
-          handleChange={handleChange}
-          openModal={openModal}
-          handleCloseModal={handleCloseModal}
-        />
+        {userData && (
+          <ProfileInfo
+            userData={userData}
+            handleSave={handleSave}
+            handleChange={handleChange}
+            openModal={openModal}
+            handleCloseModal={handleCloseModal}
+          />
+        )}
 
-        {/* Notificación */}
         <Snackbar
           open={!!message.text}
           autoHideDuration={3000}

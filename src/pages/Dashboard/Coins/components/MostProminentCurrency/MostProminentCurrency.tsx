@@ -102,7 +102,6 @@ const MostProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
                     {coin.current_price.toFixed(2)}
                     </motion.span>
                 <motion.span
-                  key={coin.price_change_percentage_24h}
                   initial={{ opacity: 0, y: -5 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}

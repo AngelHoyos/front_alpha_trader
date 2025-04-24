@@ -17,10 +17,14 @@ export const useSummary = () => {
     emitEvent("getMainCoinsLiveData");
 
     listenEvent("mainCoinsLiveData", (data: { mainCoins: Coins[] }) => {
+      console.log(data.mainCoins);
+      
       setMainCoinsData(data.mainCoins);
     });
 
     listenEvent("mainCoinsLiveUpdate", (update: Coins[]) => {
+      console.log(update);
+      
       setMainCoinsDataUpdate(update);
     });
   };

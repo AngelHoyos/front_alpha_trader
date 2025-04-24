@@ -1,24 +1,54 @@
-import React, { useState } from "react";
-import { DataUser } from "../models/DataUserRegister.model";
+import React, { useEffect, useState } from "react";
+import { ApiResponse, DataUser, normalizeUserData, RawUserData } from "../models/DataUserRegister.model";
+import { useAuth } from "./useAuth";
+import axiosInstance from "../api/axiosInstance/axiosInstance";
 
 export const useProfile = () => {
-  const [userData, setUserData] = useState<DataUser>({
-    FullName: "Juan Hernández",
-    Email: "jh746509@gmail.com",
-    DateOfBirth: "2005-10-10",
-    telefono: "3112506998",
-    Password: "123456789.As",
-    coinsList: ["bitcoin", "ethereum"],
-  });
+  const [userData, setUserData] = useState<DataUser | null>(null);
   const [message, setMessage] = useState({ text: "", type: "" });
+  const [loading, setLoading] = useState(true); 
   const [openModal, setOpenModal] = useState(false);
+  const { token } = useAuth();
+
+  const fetchUserData = async () => {
+    if (!token) {
+      setMessage({ text: "No estas autenticado", type: " error" });
+      setLoading(false);
+      return;
+    }
+    try {
+      const response = await axiosInstance.get<ApiResponse<RawUserData>>("/user/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    const rawUserData = response.data.data;
+      const normalizedData=normalizeUserData(rawUserData);
+      console.log(normalizedData);
+      
+      setUserData(normalizedData);
+      setLoading(false); 
+    } catch (error) {
+      setMessage({ text: "Error al cargar el perfil", type: "error" });
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchUserData();
+  }, [token]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserData({ ...userData, [e.target.name]: e.target.value });
+    if (userData) {
+      setUserData({ ...userData, [e.target.name]: e.target.value });
+    }
   };
 
   const handleCoinPreferencesChange = (updatedCoins: string[]) => {
-    setUserData((prev) => ({ ...prev, coinsList: updatedCoins }));
+    if (userData) {
+      setUserData((prev) =>
+        prev ? { ...prev, coinsList: updatedCoins } : prev
+      );
+    }
   };
 
   const handleSave = async () => {
@@ -53,5 +83,6 @@ export const useProfile = () => {
     handleEditClick,
     handleCloseModal,
     handleCoinPreferencesChange,
+    loading, 
   };
 };

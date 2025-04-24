@@ -10,7 +10,7 @@ export const useAuthLogin = () => {
     Email: "",
     Password: "",
   });
-  const { setToken } = useAuth();
+  const { setToken, setUserData } = useAuth();
   const [alerta, setAlerta] = useState<AlertCustomProps | null>(null);
   const { goToDashboard } = useNavigates();
 
@@ -33,7 +33,7 @@ export const useAuthLogin = () => {
     }
 
     try {
-      const { token, message } = await loginUser(userDataLogin);
+      const { data, token, message } = await loginUser(userDataLogin);
 
       if (!token) {
         setAlerta({
@@ -46,6 +46,10 @@ export const useAuthLogin = () => {
       }
 
       setToken(token);
+      if (data) {
+        setUserData(data);
+      }
+
       goToDashboard();
       return true;
     } catch (error: any) {

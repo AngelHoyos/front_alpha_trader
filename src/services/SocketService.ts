@@ -1,24 +1,31 @@
 import { io, Socket } from "socket.io-client";
-
 type ListenerCallback<T = any> = (data: T) => void;
 
 class SocketService {
   private socket: Socket | null = null;
-  
-  connect(url: string) {
-    console.log("🔧 Intentando conectar al socket"); 
+
+  connect(url: string, token: string) {
+    console.log("🔧 Intentando conectar al socket");
+    if (!token) {
+      console.error("🚫 No se proporcionó token para la conexión WebSocket.");
+      return;
+    }
+    
     if (!this.socket) {
       this.socket = io(url, {
         transports: ["websocket"],
         reconnection: true,
         reconnectionAttempts: 5,
         reconnectionDelay: 2000,
+        auth: {
+          token: `Bearer ${token}`,
+        },
       });
 
       this.socket.on("connect", () => {
         console.log("🔌 Socket conectado:", this.socket?.id);
       });
-
+      
       this.socket.on("disconnect", (reason) => {
         console.warn("❌ Socket desconectado:", reason);
       });
