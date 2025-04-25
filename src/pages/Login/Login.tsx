@@ -13,7 +13,7 @@ import { Typography } from "@mui/material";
 import ModalEmailRecoveryPassword from "../../components/Modals/ModalEmailRecoveryPassword/ModalEmailRecoveryPassword";
 
 const Login: React.FC = () => {
-  const { userDataLogin, handleChange, handleSubmit, alerta } = useAuthLogin();
+  const { userDataLogin,hanldeButtonGoogle, handleChange, handleSubmit, alerta } = useAuthLogin();
   const { goToRegister } = useNavigates();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -38,9 +38,7 @@ const Login: React.FC = () => {
     },
   };
 
-  const hanldeButton = () => {
-    console.log("hola");
-  };
+
   return (
     <>
       {alerta && <Alerts key={alerta.id} {...alerta} />}
@@ -136,7 +134,7 @@ const Login: React.FC = () => {
             <div className="flex flex-row w-full items-center justify-center mt-5 gap-x-5">
               <ButtonCutoms
                 text="Google"
-                onClick={hanldeButton}
+                onClick={hanldeButtonGoogle}
                 icon={faGoogle}
                 className="h-12"
               />

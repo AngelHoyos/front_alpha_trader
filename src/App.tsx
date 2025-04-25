@@ -11,6 +11,7 @@ import CoinDetails from "./pages/Dashboard/Coins/components/CoinDetails/CoinDeta
 import AlphaX from "./pages/Dashboard/AlphaX/AlphaX";
 import { PrivateRoute } from "./auth/PrivateRoute";
 import RecoveryPassword from "./pages/RecoveryPassword/RecoveryPassword";
+import AuthGoogleSuccess from "./pages/AuthGoogleSuccess/AuthGoogleSuccess";
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
         <Route path="/" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/recover-password" element={<RecoveryPassword />} />
-
+        <Route path="/auth/google/success" element={<AuthGoogleSuccess />} /> 
         <Route
           path="/dashboard"
           element={

@@ -6,16 +6,6 @@ import CardAds from "../../../components/CardAds/CardAds";
 import ImgCard from "../../../../public/assets/imgs/img1.png";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 const Summary = () => {
-<<<<<<< HEAD
-
-  const { getMainCoinsLiveData, getSecondaryCoinsLiveData } = useSummary();
-  useEffect(() => {
-//pruebe individualemnte por si acaso :)
-    //getMainCoinsLiveData();
-    getSecondaryCoinsLiveData();
-  }, []);
-=======
->>>>>>> e3a59bf2c74dafe7060060699e11db7b4206c1e1
   
   const coinHistoryData = [
     {

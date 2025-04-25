@@ -30,7 +30,7 @@ export const useCreateRegister = () => {
   };
 
   const handleSubmitGoogle = () => {
-    // Integración futura
+    window.location.href = "http://localhost:10101/auth/google";
   };
 
   const handleSubmit = async (): Promise<boolean> => {

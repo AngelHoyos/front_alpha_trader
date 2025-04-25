@@ -19,6 +19,11 @@ export const useAuthLogin = () => {
     setUserDataLogin((prev) => ({ ...prev, [name]: value }));
   };
 
+  const hanldeButtonGoogle = () => {
+    // Redirige al usuario a la ruta de autenticación de Google en tu backend
+    window.location.href = "http://localhost:10101/auth/google";
+  };
+
   const handleSubmit = async (): Promise<boolean> => {
     const { Email, Password } = userDataLogin;
 
@@ -65,6 +70,7 @@ export const useAuthLogin = () => {
 
   return {
     userDataLogin,
+    hanldeButtonGoogle,
     handleChange,
     handleSubmit,
     alerta,
