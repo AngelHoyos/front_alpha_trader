@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { DataUser } from "../models/DataUserRegister.model";
 import { AlertCustomProps } from "../models/AlertCustom";
 import { useNavigates } from "./useNavigates";
@@ -9,6 +9,7 @@ export const useCreateRegister = () => {
   const [confirmarContraseña, setConfirmarContraseña] = useState("");
   const [alerta, setAlerta] = useState<AlertCustomProps | null>(null);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const inputNombreRef = useRef<HTMLInputElement>(null);
   const { goToDashboard } = useNavigates();
 
   const [userData, setUserData] = useState<DataUser>({
@@ -28,19 +29,31 @@ export const useCreateRegister = () => {
     }
   };
 
-  const handleSubmitFacebook = async () => {
-    try {
-      window.location.href = "http://localhost:10101/auth/facebook";
-    } catch (error) {
-      console.error("Error al iniciar sesión con Facebook", error);
-    }
-  };
-
   const handleSubmitGoogle = () => {
     // Integración futura
   };
 
   const handleSubmit = async (): Promise<boolean> => {
+    const { FullName, Email, DateOfBirth, telefono, Password } = userData;
+
+    // Validar que todos los campos estén completos
+    if (
+      !FullName ||
+      !Email ||
+      !DateOfBirth ||
+      !telefono ||
+      !Password ||
+      !confirmarContraseña
+    ) {
+      setAlerta({
+        id: Date.now(),
+        titulo: "Advertencia",
+        mensaje: "Debe llenar todos los campos antes de continuar.",
+        tipoAlerta: "warning",
+      });
+      return false;
+    }
+
     if (!acceptedTerms) {
       setAlerta({
         id: Date.now(),
@@ -51,7 +64,7 @@ export const useCreateRegister = () => {
       return false;
     }
 
-    if (userData.Password !== confirmarContraseña) {
+    if (Password !== confirmarContraseña) {
       setAlerta({
         id: Date.now(),
         titulo: "Error",
@@ -62,16 +75,19 @@ export const useCreateRegister = () => {
     }
 
     try {
-      const response = await axiosInstance.post<ResponseToken>("/user/register", {
-        Email: userData.Email,
-        Password: userData.Password,
-        FullName: userData.FullName,
-        DateOfBirth: userData.DateOfBirth,
-        telefono: userData.telefono,
-        acceptedTerms: acceptedTerms,
-      });
+      const response = await axiosInstance.post<ResponseToken>(
+        "/user/register",
+        {
+          Email,
+          Password,
+          FullName,
+          DateOfBirth,
+          telefono,
+          acceptedTerms,
+        }
+      );
 
-      if (!response.data.token) {
+      if (!response.data.token || response.data.status!==true) {
         setAlerta({
           id: Date.now(),
           titulo: "Error",
@@ -81,14 +97,7 @@ export const useCreateRegister = () => {
         return false;
       }
 
-      localStorage.setItem("token", response.data.token);
-
-      setAlerta({
-        id: Date.now(),
-        titulo: "Éxito",
-        mensaje: "Registro exitoso",
-        tipoAlerta: "success",
-      });
+      sessionStorage.setItem("token", response.data.token);
 
       goToDashboard();
       return true;
@@ -105,17 +114,20 @@ export const useCreateRegister = () => {
 
   const handleAcceptTerms = () => {
     setAcceptedTerms(true);
+    setTimeout(() => {
+      inputNombreRef.current?.focus();
+    }, 0);
   };
 
   return {
     handleSubmitGoogle,
-    handleSubmitFacebook,
-    handleAcceptTerms,
     handleSubmit,
     handleChange,
+    inputNombreRef,
     confirmarContraseña,
     alerta,
     userData,
     acceptedTerms,
+    handleAcceptTerms,
   };
 };

@@ -1,4 +1,4 @@
-import React, {useState } from "react";
+import React, { useState } from "react";
 import "./style-register/style-register.css";
 import videoFondo from "../../../public/assets/video/fondo_register.mp4";
 import InputCustom from "../../components/Input/InputCustom";
@@ -19,6 +19,7 @@ export const Register: React.FC = () => {
     handleAcceptTerms,
     handleSubmit,
     handleChange,
+    inputNombreRef,
     confirmarContraseña,
     alerta,
     userData,
@@ -44,7 +45,6 @@ export const Register: React.FC = () => {
       transition: { duration: 0.5, ease: "easeOut" },
     },
   };
-
   return (
     <>
       {alerta && <Alerts key={alerta.id} {...alerta} />}
@@ -99,7 +99,13 @@ export const Register: React.FC = () => {
             </p>
           </div>
 
-          <div className="w-full flex justify-center items-center mt-10 flex-col">
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              await handleSubmit();
+            }}
+            className="w-full flex justify-center items-center mt-10 flex-col"
+          >
             <div className="w-[80%] grid grid-cols-2 gap-x-6 gap-y-12">
               {/* Inputs */}
               <InputCustom
@@ -109,6 +115,7 @@ export const Register: React.FC = () => {
                 value={userData.FullName}
                 onChange={handleChange}
                 fullWidth={false}
+                inputRef={inputNombreRef}
               />
               <InputCustom
                 label="Correo Electrónico"
@@ -119,15 +126,11 @@ export const Register: React.FC = () => {
                 fullWidth
                 error={
                   userData.Email !== "" &&
-                  !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-                    userData.Email
-                  )
+                  !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.Email)
                 }
                 helperText={
                   userData.Email !== "" &&
-                  !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-                    userData.Email
-                  )
+                  !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.Email)
                     ? "El correo es inválido"
                     : ""
                 }
@@ -219,22 +222,19 @@ export const Register: React.FC = () => {
               onAccept={handleAcceptTerms}
             />
 
-            <ButtonCustomLoad
-              onClick={handleSubmit}
-              sx={{ width:'20%' }}
-            >
+            <ButtonCustomLoad sx={{ width: "20%" }} type="submit">
               Crear Registro
             </ButtonCustomLoad>
 
             <div className="flex flex-row w-full items-center justify-center mt-5 gap-x-5">
               <ButtonCutoms
-                text=""
+                text="Google"
                 onClick={handleSubmitGoogle}
                 icon={faGoogle}
-                className="w-12 h-12"
+                className="h-12"
               />
             </div>
-          </div>
+          </form>
         </motion.div>
       </motion.section>
     </>

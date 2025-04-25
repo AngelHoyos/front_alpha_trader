@@ -6,6 +6,7 @@ import CardAds from "../../../components/CardAds/CardAds";
 import ImgCard from "../../../../public/assets/imgs/img1.png";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 const Summary = () => {
+  
   const coinHistoryData = [
     {
       id: 1,
@@ -166,7 +167,6 @@ const Summary = () => {
         px: 2,
       }}
     >
-      {/* Contenedor Principal (Gráficos y Tabla) */}
       <Box
         sx={{
           flex: 3,
@@ -175,10 +175,7 @@ const Summary = () => {
           gap: 3,
         }}
       >
-        <CryptoChart
-          title="Analisis"
-          data={cryptoData}
-        />
+        <CryptoChart title="Analisis" data={cryptoData} />
         <HistoryTable data={coinHistoryData} />
       </Box>
 

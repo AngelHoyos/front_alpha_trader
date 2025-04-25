@@ -1,5 +1,10 @@
+export interface UserData {
+  fullName: string;
+  profilePicture: string;
+}
 export interface ResponseToken {
-    token?: string; 
-    message?: string; 
-  }
-  
+  status?: boolean;
+  token?: string;
+  message?: string;
+  data?: UserData;
+}

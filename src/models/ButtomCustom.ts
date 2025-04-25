@@ -11,10 +11,11 @@ export interface ButtonCustomProps {
 }
 
 export interface ButtonCustomLoading {
-  onClick: () => void;
+  onClick?: () => void;
   children: React.ReactNode;
 }
 
 export interface Props extends ButtonCustomLoading {
   sx?: SxProps<Theme>;
+  type?:'button' | 'submit'
 }
