@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { Box } from "@mui/material";
 import HistoryTable from "../../../components/HistoryTable/HistoryTable";
 import TopCoins from "./components/TopCoins/TopCoins";
@@ -6,8 +5,8 @@ import CryptoChart from "../../../components/Charts/Area/AreaChart";
 import CardAds from "../../../components/CardAds/CardAds";
 import ImgCard from "../../../../public/assets/imgs/img1.png";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
-import { useSummary } from "../../../hooks/useSummary";
 const Summary = () => {
+<<<<<<< HEAD
 
   const { getMainCoinsLiveData, getSecondaryCoinsLiveData } = useSummary();
   useEffect(() => {
@@ -15,8 +14,9 @@ const Summary = () => {
     //getMainCoinsLiveData();
     getSecondaryCoinsLiveData();
   }, []);
+=======
+>>>>>>> e3a59bf2c74dafe7060060699e11db7b4206c1e1
   
-  //getSecondaryCoinsLiveData()
   const coinHistoryData = [
     {
       id: 1,
@@ -177,7 +177,6 @@ const Summary = () => {
         px: 2,
       }}
     >
-      {/* Contenedor Principal (Gráficos y Tabla) */}
       <Box
         sx={{
           flex: 3,
@@ -186,10 +185,7 @@ const Summary = () => {
           gap: 3,
         }}
       >
-        <CryptoChart
-          title="Analisis"
-          data={cryptoData}
-        />
+        <CryptoChart title="Analisis" data={cryptoData} />
         <HistoryTable data={coinHistoryData} />
       </Box>
 

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { CoinsCardProps } from "../../../../../models/Coins.model";
+import { useState } from "react";
+import {  CoinsCardProps } from "../../../../../models/Coins.model";
 import {
   Card,
   CardContent,
@@ -17,6 +17,7 @@ import {
   faArrowUpRightFromSquare,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
 
 const MostProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
   const [open, setOpen] = useState(false);
@@ -61,7 +62,7 @@ const MostProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
           <List>
             {coins.slice(0, 3).map((coin) => (
               <ListItem
-                key={coin.name}
+                key={coin.binance_symbol}
                 sx={{
                   borderRadius: 2,
                   display: "flex",
@@ -73,21 +74,52 @@ const MostProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
                   px: 1,
                 }}
               >
-                <Typography variant="h5">{coin.icon}</Typography>
+                <img
+                  src={coin.image}
+                  alt={coin.name}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null; // evita loop infinito si la imagen por defecto también falla
+                    e.currentTarget.src =
+                      "https://via.placeholder.com/32?text=Coin"; // imagen por defecto
+                  }}
+                  style={{ width: 32, height: 32, borderRadius: 4 }}
+                />
                 <Typography variant="body1" sx={{ flex: 1, ml: 2 }}>
                   {coin.name}
                 </Typography>
-                <Typography variant="body2">{coin.price}</Typography>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    color: coin.isPositive ? "#4CAF50" : "#E53935",
-                    fontWeight: "bold",
-                    ml: 2,
+                <motion.span
+                  key={coin.current_price}
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  style={{
+                    fontSize: ".95rem",
+                    lineHeight: 1.5,
+                    letterSpacing: "0.00938em",
+                    fontFamily: "Roboto, Arial, sans-serif",
                   }}
                 >
-                  {coin.change}
-                </Typography>
+                    {coin.current_price.toFixed(2)}
+                    </motion.span>
+                <motion.span
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  style={{
+                    color:
+                      coin.price_change_percentage_24h >= 0
+                        ? "#4CAF50"
+                        : "#E53935",
+                    fontWeight: "bold",
+                    marginLeft: 8,
+                    fontSize: ".95rem",
+                    lineHeight: 1.5,
+                    letterSpacing: "0.00938em",
+                    fontFamily: "Roboto, Arial, sans-serif",
+                  }}
+                >
+                  {Math.round(coin.price_change_percentage_24h * 100) / 100}%
+                </motion.span>
               </ListItem>
             ))}
           </List>
@@ -152,21 +184,54 @@ const MostProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
                     px: 1,
                   }}
                 >
-                  <Typography variant="h5">{coin.icon}</Typography>
+                  <img
+                    src={coin.image}
+                    alt={coin.name}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null; // evita loop infinito si la imagen por defecto también falla
+                      e.currentTarget.src =
+                        "https://via.placeholder.com/32?text=Coin"; // imagen por defecto
+                    }}
+                    style={{ width: 32, height: 32, borderRadius: 4 }}
+                  />
                   <Typography variant="body1" sx={{ flex: 1, ml: 2 }}>
                     {coin.name}
                   </Typography>
-                  <Typography variant="body2">{coin.price}</Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: coin.isPositive ? "#4CAF50" : "#E53935",
-                      fontWeight: "bold",
-                      ml: 2,
+                  <motion.span
+                    key={coin.current_price}
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                    style={{
+                      fontSize: ".95rem",
+                      lineHeight: 1.5,
+                      letterSpacing: "0.00938em",
+                      fontFamily: "Roboto, Arial, sans-serif",
                     }}
                   >
-                    {coin.change}
-                  </Typography>
+                    {coin.current_price.toFixed(2)}
+                  </motion.span>
+
+                  <motion.span
+                    key={coin.price_change_percentage_24h}
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                    style={{
+                      color:
+                        coin.price_change_percentage_24h >= 0
+                          ? "#4CAF50"
+                          : "#E53935",
+                      fontWeight: "bold",
+                      marginLeft: 8,
+                      fontSize: ".95rem",
+                      lineHeight: 1.5,
+                      letterSpacing: "0.00938em",
+                      fontFamily: "Roboto, Arial, sans-serif",
+                    }}
+                  >
+                  {Math.round(coin.price_change_percentage_24h * 100) / 100}%
+                  </motion.span>
                 </ListItem>
               ))}
             </List>

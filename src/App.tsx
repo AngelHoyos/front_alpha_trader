@@ -9,6 +9,8 @@ import Coins from "./pages/Dashboard/Coins/Coins";
 import Profile from "./components/Profile/Profile";
 import CoinDetails from "./pages/Dashboard/Coins/components/CoinDetails/CoinDetails";
 import AlphaX from "./pages/Dashboard/AlphaX/AlphaX";
+import { PrivateRoute } from "./auth/PrivateRoute";
+import RecoveryPassword from "./pages/RecoveryPassword/RecoveryPassword";
 
 function App() {
   return (
@@ -16,7 +18,16 @@ function App() {
       <Routes>
         <Route path="/" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />}>
+        <Route path="/recover-password" element={<RecoveryPassword />} />
+
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        >
           <Route index element={<Summary />} />
           <Route path="summary" element={<Summary />} />
           <Route path="wallet" element={<Wallet />} />

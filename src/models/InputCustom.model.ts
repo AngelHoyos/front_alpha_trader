@@ -8,4 +8,5 @@ export interface InputCustomProps{
     InputLabelProps?:boolean;
     error?:boolean;
     helperText?:string;
+    inputRef?:React.Ref<HTMLInputElement>
 };

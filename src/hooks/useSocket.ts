@@ -1,55 +1,30 @@
-import { useEffect, useRef } from "react";
-import { io, Socket } from "socket.io-client";
+import { useRef } from "react";
+import { socketService } from "../services/SocketService";
 
-const SOCKET_URL = "http://localhost:10101";
+const SOCKET_URL = "https://alphatrader.up.railway.app/";
 
 export const useSocket = () => {
-  const socketRef = useRef<Socket | null>(null);
-
-  useEffect(() => {
-    if (!socketRef.current) {
-      socketRef.current = io(SOCKET_URL, { transports: ["websocket"] });
-
-      socketRef.current.on("secondaryCoinsLiveData", (data) => {
-        console.log("Data secundarias en vivo:", data);
-      });
-
-      socketRef.current.on("mainCoinsLiveData", (data) => {
-        console.log("Data principales en vivo:", data);
-      });
-
-      socketRef.current.on("connect", () => {
-        console.log("Conectado al servidor WebSocket:", socketRef.current?.id);
-      });
-
-      socketRef.current.on("disconnect", () => {
-        console.warn("Desconectado del servidor WebSocket");
-      });
-
-      socketRef.current.on("error", (error) => {
-        console.error("Error en socket:", error);
-      });
+  const IsConnected = useRef(false);
+  const connect = () => {
+    const token = sessionStorage.getItem("token");
+    if (!IsConnected.current && token) {
+      socketService.connect(SOCKET_URL, token);
+      IsConnected.current = true;
     }
-
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-        socketRef.current = null;
-      }
-    };
-  }, []);
-
-  const emitEvent = (eventName: string, data?: any) => {
-    socketRef.current?.emit(eventName, data);
+    
   };
 
-  const listenEvent = (eventName: string, callback: (...args: any[]) => void) => {
-    socketRef.current?.on(eventName, callback);
+  const disconnect = () => {
+    if (IsConnected.current) {
+      socketService.disconnect();
+      IsConnected.current = false;
+    }
   };
-
-  const offEvent = (eventName: string) => {
-    socketRef.current?.off(eventName);
+  return {
+    connect,
+    disconnect,
+    emitEvent: socketService.emiEvent.bind(socketService),
+    listenEvent: socketService.listenEvent.bind(socketService),
+    removeListener: socketService.removeListener.bind(socketService),
   };
-
-  return { socket: socketRef.current, emitEvent, listenEvent, offEvent };
 };

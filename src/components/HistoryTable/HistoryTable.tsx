@@ -20,7 +20,7 @@ import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const HistoryTable: React.FC<PropsTable> = ({ data }) => {
-  const { filter, setFilter, filteredData } = useFilter(data, "moneda");
+  const {setFilter, filteredData } = useFilter(data, "moneda");
   const moneda = ["Todo", ...new Set(data.map((item) => item.moneda))];
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

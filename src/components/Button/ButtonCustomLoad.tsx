@@ -1,25 +1,34 @@
 import React, { useState } from "react";
-import { ButtonCustomLoading } from "../../models/ButtomCustom";
-import { Button, CircularProgress } from "@mui/material";
+import { Props } from "../../models/ButtomCustom";
+import { CircularProgress } from "@mui/material";
+import { ButtonCustom } from "./styled-component/ButtomCustom.style";
 
-export const ButtonCustomLoad: React.FC<ButtonCustomLoading> = ({
+export const ButtonCustomLoad: React.FC<Props> = ({
   onClick,
   children,
+  sx = {},
+  type = "button",
 }) => {
   const [loading, setLoading] = useState(false);
 
   const handleClick = async () => {
     setLoading(true);
+
     try {
-      await onClick();
+      if (onClick) {
+        await onClick();
+      } else {
+        await new Promise((res) => setTimeout(res, 3000));
+      }
     } finally {
       setLoading(false);
     }
   };
   return (
-    <Button
+    <ButtonCustom
       variant="contained"
       onClick={handleClick}
+      type={type}
       startIcon={
         loading ? <CircularProgress size={20} sx={{ color: "white" }} /> : null
       }
@@ -27,10 +36,11 @@ export const ButtonCustomLoad: React.FC<ButtonCustomLoading> = ({
         backgroundColor: "#5114A6",
         textTransform: "none",
         fontSize: "1rem",
-        width:'15%'
+        width: "15%",
+        ...sx,
       }}
     >
       {loading ? "Cargando..." : children}{" "}
-    </Button>
+    </ButtonCustom>
   );
 };
