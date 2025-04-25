@@ -15,7 +15,6 @@ import {
 } from "@mui/material";
 import { CoinPreferencesProps } from "../../../../models/Profile.model";
 import { useCoinPreference } from "../../../../hooks/useCoinPreference";
-import axiosInstance from "../../../../api/axiosInstance/axiosInstance";
 
 const CoinPreferences: React.FC<CoinPreferencesProps> = ({
   availableCoins = [],

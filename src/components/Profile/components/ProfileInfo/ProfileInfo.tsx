@@ -13,7 +13,6 @@ import ExampleTab from "./components/PreferencesQuestionnaire/PreferencesQuestio
 
 const ProfileInfo: React.FC<ProfileInfoProps> = ({
   userData,
-  handleChange,
   openModal,
   handleCloseModal,
 }) => {
