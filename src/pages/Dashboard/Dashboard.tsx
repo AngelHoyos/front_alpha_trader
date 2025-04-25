@@ -19,7 +19,7 @@ const Dashboard = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#000317",
+        backgroundColor: "#000411",
         position: "absolute",
         width: "100%",
         height: "100%",

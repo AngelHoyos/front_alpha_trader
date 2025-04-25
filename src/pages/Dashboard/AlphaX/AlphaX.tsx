@@ -14,11 +14,12 @@ import { useChatLogic } from "../../../hooks/useChatLogic";
 import ReactMarkdown from "react-markdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faComments,
   faLightbulb,
   faPaperPlane,
-  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { TipsModal } from "../../../components/Modals/ModalTipsAlphaX/ModalTipsAlphaX";
+import DotSpinner from "./components/DotSpinner/DotSpinner";
 
 const AlphaX: React.FC = () => {
   const {
@@ -39,7 +40,6 @@ const AlphaX: React.FC = () => {
     tipsModalOpen,
     setTipsModalOpen,
     isFirstVisit,
-    setIsFirstVisit,
   } = useChatLogic({
     botReply,
     message,
@@ -49,6 +49,7 @@ const AlphaX: React.FC = () => {
     resetMessage: () => setMessage(""),
     setError,
   });
+
   const handleSelectTip = (tip: string) => {
     setMessage(tip);
   };
@@ -79,90 +80,36 @@ const AlphaX: React.FC = () => {
           <Box
             sx={{
               display: "flex",
-              justifyContent: "flex-start",
+              justifyContent: "center",
+              alignItems: "center",
               mb: 2,
+              width: "100%",
+              height: "100%",
             }}
           >
             <Box
               sx={{
-                maxWidth: "75%",
                 p: 2,
                 borderRadius: 2,
-                background:
-                  "linear-gradient(135deg, rgba(81,20,166,0.2) 0%, rgba(81,20,166,0.1) 100%)",
+                width: "100%",
                 color: "white",
                 backdropFilter: "blur(10px)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
                 boxShadow: "none",
-                textAlign: "justified",
-                textAlignLast: "left",
+                textAlign: "center",
               }}
             >
-              <Typography variant="h5" sx={{ mb: 1, fontWeight: "bold" }}>
+              <Typography
+                variant="h3"
+                sx={{ mb: 1, fontWeight: "bold", opacity: 0.6 }}
+              >
                 Bienvenido a Alpha X
               </Typography>
-              <Typography variant="body1" sx={{ mb: 2 }}>
+              <Typography
+                variant="h6"
+                sx={{ mb: 2, fontWeight: "bold", opacity: 0.6 }}
+              >
                 Tu asesor inteligente y confiable.
               </Typography>
-
-              <Box
-                sx={{
-                  borderTop: "1px solid rgba(255,255,255,0.1)",
-                  pt: 2,
-                  mt: 2,
-                }}
-              >
-                <Typography variant="body2" sx={{ fontStyle: "italic", mb: 1 }}>
-                  Escrito: algo
-                </Typography>
-                <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-                  <Box
-                    sx={{
-                      width: 24,
-                      height: 24,
-                      mr: 1,
-                      border: "1px solid white",
-                      borderRadius: "4px",
-                    }}
-                  />
-                  <Typography variant="body2">Nuevo Chat</Typography>
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-                  <Box
-                    sx={{
-                      width: 24,
-                      height: 24,
-                      mr: 1,
-                      border: "1px solid white",
-                      borderRadius: "4px",
-                      backgroundColor: "primary.main",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Typography
-                      variant="body2"
-                      sx={{ color: "white", fontSize: "12px" }}
-                    >
-                      ✓
-                    </Typography>
-                  </Box>
-                  <Typography variant="body2">Historial</Typography>
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Box
-                    sx={{
-                      width: 24,
-                      height: 24,
-                      mr: 1,
-                      border: "1px solid white",
-                      borderRadius: "4px",
-                    }}
-                  />
-                  <Typography variant="body2">Consejos</Typography>
-                </Box>
-              </Box>
             </Box>
           </Box>
         )}
@@ -174,6 +121,7 @@ const AlphaX: React.FC = () => {
               justifyContent:
                 msg.type === "question" ? "flex-end" : "flex-start",
               mb: 2,
+              mx: "14.6%",
             }}
           >
             {msg.type === "question" ? (
@@ -260,36 +208,29 @@ const AlphaX: React.FC = () => {
         ))}
 
         {loading && (
-          <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-            <Box
-              sx={{
-                maxWidth: "75%",
-                p: 2,
-                borderRadius: 2,
-                background:
-                  "linear-gradient(135deg, rgba(81,20,166,0.2) 0%, rgba(81,20,166,0.1) 100%)",
-                color: "white",
-                backdropFilter: "blur(10px)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-                boxShadow: "none",
-                textAlign: "justify",
-                textAlignLast: "left",
-                "& pre": {
-                  backgroundColor: "rgba(0,0,0,0.3)",
-                  borderRadius: 1,
-                  p: 1.5,
-                  overflowX: "auto",
-                },
-              }}
-            >
-              <CircularProgress size={20} />
-            </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-start",
+              mx: 2,
+              ml: "14.6%",
+            }}
+          >
+            <DotSpinner />
           </Box>
         )}
       </Paper>
 
-      <Box>
-        <Box sx={{ p: 2, pt: 0 }}>
+      <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+        <Box
+          sx={{
+            p: 2,
+            width: "70%",
+            border: "1px #571773 solid",
+            borderRadius: "30px",
+            mb: 2,
+          }}
+        >
           <Stack direction="row" spacing={1}>
             <TextField
               variant="outlined"
@@ -300,16 +241,19 @@ const AlphaX: React.FC = () => {
               onChange={handleChange}
               onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
               sx={{
+                backgroundColor: "rgba(87, 23, 115, 0.68)", // tu color base
+                borderRadius: "10px",
                 input: { color: "white" },
                 "& .MuiOutlinedInput-root": {
+                  borderRadius: "10px",
                   "& fieldset": {
-                    borderColor: "white",
+                    borderColor: "rgba(255, 255, 255, 0.2)", // más suave
                   },
                   "&:hover fieldset": {
-                    borderColor: "white",
+                    borderColor: "#a45de6", // púrpura claro
                   },
                   "&.Mui-focused fieldset": {
-                    borderColor: "white",
+                    borderColor: "#a45de6", // más llamativo al enfocar
                   },
                 },
                 "& .MuiInputLabel-root": {
@@ -326,12 +270,12 @@ const AlphaX: React.FC = () => {
                       color: "white",
                       p: 1,
                       "&:hover": {
-                        backgroundColor: "rgba(255, 255, 255, 0.1)",
+                        backgroundColor: "rgba(255, 255, 255, 0.15)", // sutil y elegante
                       },
                     }}
                   >
                     {loading ? (
-                      <CircularProgress size={18} sx={{ color: "white" }} />
+                      <CircularProgress size={18} sx={{ color: "#e0e0e0" }} />
                     ) : (
                       <FontAwesomeIcon icon={faPaperPlane} />
                     )}
@@ -341,42 +285,54 @@ const AlphaX: React.FC = () => {
               InputLabelProps={{ style: { color: "white" } }}
             />
           </Stack>
-        </Box>
-        <Box sx={{ p: 2, display: "flex", gap: 1, overflowX: "auto" }}>
-          <Button
-            variant="outlined"
-            onClick={() => setTipsModalOpen(true)}
-            startIcon={<FontAwesomeIcon icon={faLightbulb} />}
+          <Box
             sx={{
-              color: "white",
-              borderColor: "white",
-              flexGrow: 1,
-              "&:hover": {
-                borderColor: "white",
-                backgroundColor: "rgba(255, 255, 255, 0.1)",
-              },
+              pt: 2,
+              display: "flex",
+              gap: 1,
+              overflowX: "auto",
+              width: "100%",
             }}
           >
-            Consejos
-          </Button>
-
-          <Button
-            variant="outlined"
-            onClick={clearChat}
-            startIcon={<FontAwesomeIcon icon={faTrash} />}
-            sx={{
-              color: "white",
-              borderColor: "white",
-              whiteSpace: "nowrap",
-              flexShrink: 0,
-              "&:hover": {
-                borderColor: "white",
-                backgroundColor: "rgba(255, 255, 255, 0.1)",
-              },
-            }}
-          >
-            Limpiar chat
-          </Button>
+            <Button
+              variant="outlined"
+              onClick={clearChat}
+              startIcon={<FontAwesomeIcon icon={faComments} />}
+              sx={{
+                color: "white",
+                border: "none",
+                backgroundColor: "rgba(87, 23, 115, 0.68)",
+                whiteSpace: "nowrap",
+                borderRadius: "10px",
+                width: "calc(100% * 0.14)", // equivale a 12% del contenedor
+                flexShrink: 0,
+                "&:hover": {
+                  borderColor: "white",
+                  backgroundColor: "rgba(87, 23, 115, 0.90)",
+                },
+              }}
+            >
+              Nuevo chat
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => setTipsModalOpen(true)}
+              startIcon={<FontAwesomeIcon icon={faLightbulb} />}
+              sx={{
+                color: "white",
+                border: "none",
+                borderRadius: "10px",
+                backgroundColor: "rgba(87, 23, 115, 0.68)",
+                width: "12%",
+                "&:hover": {
+                  borderColor: "white",
+                  backgroundColor: "rgba(87, 23, 115, 0.90)",
+                },
+              }}
+            >
+              Consejos
+            </Button>
+          </Box>
         </Box>
       </Box>
       <TipsModal

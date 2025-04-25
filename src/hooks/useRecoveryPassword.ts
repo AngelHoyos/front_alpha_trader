@@ -41,8 +41,8 @@ export const useRecoveryPassword = (token: string, email: string, expiresAt: str
     }
 
     try {
-      await axiosInstance.post("/password-change", {
-        token: `Bearer ${token}`,
+      await axiosInstance.post("/auth/password-change", {
+        token: `${token}`,
         password: password,
         passwordConfirmation: confirmPassword,
         email: email,

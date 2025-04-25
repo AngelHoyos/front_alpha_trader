@@ -9,28 +9,31 @@ export const useChatLogic = ({
   resetMessage,
   setError,
 }: UseChatLogicProps) => {
-  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>(() => {
+    const saved = localStorage.getItem("alphaXChatHistory");
+    return saved ? JSON.parse(saved) : [];
+  });
   const [tipsModalOpen, setTipsModalOpen] = useState(false);
-  const [isFirstVisit, setIsFirstVisit] = useState(false);
-  const presetMessages = [
-    "¿Cómo puedo ayudarte hoy?",
-    "Explícame más sobre tu proyecto",
-  ];
+
+  const [isFirstVisit, setIsFirstVisit] = useState(() => {
+    return !localStorage.getItem("alphaXHasVisited");
+  });
+
+  useEffect(() => {
+    localStorage.setItem("alphaXChatHistory", JSON.stringify(chatHistory));
+
+    if (chatHistory.length > 0 && isFirstVisit) {
+      setIsFirstVisit(false);
+      localStorage.setItem("alphaXHasVisited", "true");
+    }
+  }, [chatHistory, isFirstVisit]);
+
   useEffect(() => {
     if (error) {
       setChatHistory((prev) => [...prev, { type: "error", content: error }]);
       setError(null);
     }
-  }, [error]);
-
-  useEffect(() => {
-    const visitedBefore = localStorage.getItem("hasVisitedAlphaX");
-    if (visitedBefore) {
-      setIsFirstVisit(false);
-    } else {
-      localStorage.setItem("hasVisitedAlphaX", "true");
-    }
-  }, []);
+  }, [error, setError]);
 
   const handleSubmit = () => {
     if (message.trim()) {
@@ -58,12 +61,10 @@ export const useChatLogic = ({
 
   return {
     chatHistory,
-    presetMessages,
     clearChat,
     handleSubmit,
     tipsModalOpen,
     setTipsModalOpen,
     isFirstVisit,
-    setIsFirstVisit,
   };
 };
