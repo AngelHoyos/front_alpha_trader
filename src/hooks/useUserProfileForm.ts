@@ -2,14 +2,20 @@ import { useState } from "react";
 import { DataUser } from "../models/DataUserRegister.model";
 import axiosInstance from "../api/axiosInstance/axiosInstance";
 import { useAuth } from "./useAuth";
+type Severity = 'error' | 'info' | 'success' | 'warning';
+
+interface Message {
+  text: string;
+  type: Severity;
+}
 
 export const useUserProfileForm = (initialData: DataUser) => {
   const { token } = useAuth();
   const [formData, setFormData] = useState<DataUser>(initialData);
   const [loading, setLoading] = useState<boolean>(false);
-  const [message, setMessage] = useState({
+  const [message, setMessage] = useState<Message>({
     text: "",
-    type: "",
+    type: "info",
   });
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
 
@@ -31,7 +37,7 @@ export const useUserProfileForm = (initialData: DataUser) => {
   const handleUpdateUser = async () => {
     try {
       setLoading(true);
-      setMessage({ text: "", type: "" });
+      setMessage({ text: "", type: "info" });
 
       const response = await axiosInstance.put(`/user/profile`, formData, {
         headers: {
@@ -71,7 +77,7 @@ export const useUserProfileForm = (initialData: DataUser) => {
       formImage.append("profilePicture", profilePicture);
 
       setLoading(true);
-      setMessage({ text: "", type: "" });
+      setMessage({ text: "", type: "info" });
 
       const response = await axiosInstance.put(
         `/user/imageProfile`,
@@ -113,7 +119,7 @@ export const useUserProfileForm = (initialData: DataUser) => {
 
     try {
       setLoading(true);
-      setMessage({ text: "", type: "" });
+      setMessage({ text: "", type: "info" });
 
       const response = await axiosInstance.put(
         `/user/password`,

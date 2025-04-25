@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Coins, CoinsCardProps } from "../../../../../models/Coins.model";
+import {  CoinsCardProps } from "../../../../../models/Coins.model";
 import {
   Card,
   CardContent,
