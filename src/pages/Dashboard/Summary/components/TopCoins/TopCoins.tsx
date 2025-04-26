@@ -1,7 +1,11 @@
 import React from "react";
 import { Card, Typography, Box } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUp, faArrowDown, faMinus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowUp,
+  faArrowDown,
+  faMinus,
+} from "@fortawesome/free-solid-svg-icons";
 import { Coin } from "../../../../../models/TopCoins"; // Adjust the path as needed
 
 export interface TopCoinsProps {
@@ -9,16 +13,15 @@ export interface TopCoinsProps {
 }
 
 const TopCoins: React.FC<TopCoinsProps> = ({ coinsData }) => {
-
-  const getTrendStyle = (trend24h: 'bullish' | 'bearish' | 'neutral') => {
+  const getTrendStyle = (trend24h: "bullish" | "bearish" | "neutral") => {
     switch (trend24h) {
-      case 'bullish':
-        return { color: '#069F2F', icon: faArrowUp }; // Green color, Up arrow
-      case 'bearish':
-        return { color: '#D55F5A', icon: faArrowDown }; // Red color, Down arrow
-      case 'neutral':
+      case "bullish":
+        return { color: "#069F2F", icon: faArrowUp }; // Green color, Up arrow
+      case "bearish":
+        return { color: "#D55F5A", icon: faArrowDown }; // Red color, Down arrow
+      case "neutral":
       default:
-        return { color: 'grey', icon: faMinus }; // Grey color, Minus sign
+        return { color: "grey", icon: faMinus }; // Grey color, Minus sign
     }
   };
 
@@ -31,8 +34,8 @@ const TopCoins: React.FC<TopCoinsProps> = ({ coinsData }) => {
         borderRadius: "12px",
         p: 2, // Keep padding on the main card
         color: "white",
-        display: 'flex', // Added for better height control if needed
-        flexDirection: 'column', // Stack title and list vertically
+        display: "flex", // Added for better height control if needed
+        flexDirection: "column", // Stack title and list vertically
         // Optional: Set a max-height for the card itself if desired
         // maxHeight: '500px',
       }}
@@ -53,8 +56,8 @@ const TopCoins: React.FC<TopCoinsProps> = ({ coinsData }) => {
       {/* Scrollable Container for the coin list */}
       <Box
         sx={{
-          overflowY: 'auto', // Enable vertical scrolling only when needed
-          maxHeight: '00px', // Define a max height for the list area (adjust as needed)
+          overflowY: "auto", // Enable vertical scrolling only when needed
+          maxHeight: "00px", // Define a max height for the list area (adjust as needed)
           // Add some padding to the right to prevent scrollbar overlap if needed
           pr: 1, // Padding right for scrollbar spacing
           // Ensure the box grows if content is less than maxHeight but card has space
@@ -64,8 +67,9 @@ const TopCoins: React.FC<TopCoinsProps> = ({ coinsData }) => {
         }}
       >
         {coinsData.map((coin) => {
-          const trendStyle = getTrendStyle(coin.trend24h);
-
+          const trendStyle = getTrendStyle(
+            coin.trend24h as "bullish" | "bearish" | "neutral"
+          );
           return (
             <Box
               key={coin.id}
@@ -75,8 +79,8 @@ const TopCoins: React.FC<TopCoinsProps> = ({ coinsData }) => {
                 justifyContent: "space-between",
                 borderRadius: "8px",
                 // Adjust padding inside list items if needed, removed horizontal padding from parent
-                p: '10px 0px', // Padding top/bottom, no horizontal padding here
-                pl: '10px', // Use left padding to align with title
+                p: "10px 0px", // Padding top/bottom, no horizontal padding here
+                pl: "10px", // Use left padding to align with title
                 mb: 1,
                 transition: "background-color 0.3s ease",
                 "&:hover": {
@@ -89,7 +93,7 @@ const TopCoins: React.FC<TopCoinsProps> = ({ coinsData }) => {
                 <img
                   src={coin.image}
                   alt={coin.name}
-                  style={{ width: '24px', height: '24px', borderRadius: '50%' }}
+                  style={{ width: "24px", height: "24px", borderRadius: "50%" }}
                 />
                 <Typography sx={{ fontSize: "1.1rem", fontWeight: "bold" }}>
                   {coin.name}
@@ -97,7 +101,16 @@ const TopCoins: React.FC<TopCoinsProps> = ({ coinsData }) => {
               </Box>
 
               {/* Right side: Price and Trend Icon */}
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1, pr: '10px' }}> {/* Add padding right here */}
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                  pr: "10px",
+                }}
+              >
+                {" "}
+                {/* Add padding right here */}
                 <Typography
                   sx={{
                     fontSize: "1.1rem",
@@ -105,7 +118,10 @@ const TopCoins: React.FC<TopCoinsProps> = ({ coinsData }) => {
                     color: trendStyle.color,
                   }}
                 >
-                  {`$${coin.currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                  {`$${coin.currentPrice.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}`}
                 </Typography>
                 <FontAwesomeIcon
                   icon={trendStyle.icon}

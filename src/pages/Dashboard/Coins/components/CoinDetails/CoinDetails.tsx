@@ -53,7 +53,6 @@ const CoinDetails: React.FC = () => {
   ];
   const [valueName, setValueName] = useState("bitcoin");
   const [intervals, setIntervals] = useState<IntervalKey>("1m");
-  const [ListCoin, setListCoin] = useState<string[]>([]);
   const {
     rawCryptoData,
 
@@ -66,7 +65,6 @@ const CoinDetails: React.FC = () => {
   }, [valueName, intervals]);
   useEffect(() => {
     if (rawCryptoData && rawCryptoData.preferredSymbols) {
-      setListCoin(rawCryptoData.preferredSymbols);
     }
   }, [rawCryptoData]);
 
