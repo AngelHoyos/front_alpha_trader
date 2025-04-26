@@ -36,10 +36,6 @@ const Login: React.FC = () => {
       transition: { duration: 0.5, ease: "easeOut" },
     },
   };
-
-  const hanldeButton = () => {
-    console.log("hola");
-  };
   return (
     <>
       {alerta && <Alerts key={alerta.id} {...alerta} />}
