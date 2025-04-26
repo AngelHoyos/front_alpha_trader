@@ -1,6 +1,7 @@
 import { Box, Button, Card, Typography } from "@mui/material";
 import React from "react";
 import { CardAdsCustomProps } from "../../models/CardAds.model";
+import { useNavigate } from "react-router";
 
 const CardAds: React.FC<CardAdsCustomProps> = ({
   title,
@@ -8,7 +9,14 @@ const CardAds: React.FC<CardAdsCustomProps> = ({
   backgroundButton = "#5114A6",
   img,
   textButton = "Empezar",
+  targetPath,
+  predeterminedQuestion,
 }) => {
+  const navigate = useNavigate(); // Hook para la navegación
+  const handleButtonClick = () => {
+    navigate(targetPath, { state: { question: predeterminedQuestion } });
+  };
+
   return (
     <Card
       sx={{
@@ -45,14 +53,19 @@ const CardAds: React.FC<CardAdsCustomProps> = ({
       </Box>
 
       {/* Contenedor de título */}
-      <Box sx={{ p: 2, textAlign: "left", ml:'15px'}}>
-        <Typography variant="h6" sx={{ color: "white", fontWeight: "600", fontSize:'1.3rem' }}>
+      <Box sx={{ p: 2, textAlign: "left", ml: "15px" }}>
+        <Typography
+          variant="h6"
+          sx={{ color: "white", fontWeight: "600", fontSize: "1.3rem" }}
+        >
           {title}
         </Typography>
       </Box>
 
       {/* Contenedor del botón */}
-      <Box sx={{ width: "100%", display: "flex", justifyContent: "center", mb: 3}}>
+      <Box
+        sx={{ width: "100%", display: "flex", justifyContent: "center", mb: 3 }}
+      >
         <Button
           variant="contained"
           size="large"
@@ -63,6 +76,7 @@ const CardAds: React.FC<CardAdsCustomProps> = ({
             width: "40%",
             borderRadius: "10px",
           }}
+          onClick={handleButtonClick}
         >
           {textButton}
         </Button>

@@ -5,6 +5,8 @@ export const mergeCoinsData = (
   originalData: Coins[],
   updates: Coins[]
 ): Coins[] => {
+  console.log(updates);
+  
   const validUpdates = updates.filter((coin) => {
     const price = Number(coin.Precio);
     return coin.symboloBinance && !isNaN(price) && price > 0;

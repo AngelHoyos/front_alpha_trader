@@ -21,10 +21,7 @@ const UserProfile: React.FC<Props> = ({ initialData }) => {
   const {
     formData,
     handleChange,
-    handleUpdateUser,
     handleFileChange,
-    handleUpdateProfilePicture,
-    handleUpdatePassword,
     loading,
     message,
     profilePicture,
@@ -42,7 +39,6 @@ const UserProfile: React.FC<Props> = ({ initialData }) => {
     if (formData.Password !== confirmPassword) {
       return alert("Las contraseñas no coinciden.");
     }
-    handleUpdatePassword();
   };
 
   useEffect(() => {
@@ -85,11 +81,7 @@ const UserProfile: React.FC<Props> = ({ initialData }) => {
             />
           </IconButton>
         </Tooltip>
-        <div>
-          <button onClick={handleUpdateProfilePicture} disabled={loading}>
-            {loading ? <CircularProgress size={20} /> : "Actualizar Foto"}
-          </button>
-        </div>
+
       </div>
 
       <Divider sx={{ my: 3 }} />
@@ -123,9 +115,7 @@ const UserProfile: React.FC<Props> = ({ initialData }) => {
             value={formData.telefono}
             onChange={handleChange}
           />
-          <button onClick={handleUpdateUser} disabled={loading}>
-            {loading ? <CircularProgress size={20} /> : "Actualizar Usuario"}
-          </button>
+
         </form>
       </div>
 

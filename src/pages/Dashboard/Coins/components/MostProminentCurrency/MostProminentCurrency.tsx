@@ -28,7 +28,7 @@ const MostProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
     <>
       <Card
         sx={{
-          width: 400,
+          width: 500,
           bgcolor: "rgba(81,20,166,0.45)",
           border: "1px solid #5114A6",
           color: "white",
@@ -62,7 +62,7 @@ const MostProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
           <List>
             {coins.slice(0, 3).map((coin) => (
               <ListItem
-                key={coin.binance_symbol}
+                key={coin.binanceSymbol}
                 sx={{
                   borderRadius: 2,
                   display: "flex",
@@ -88,7 +88,7 @@ const MostProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
                   {coin.name}
                 </Typography>
                 <motion.span
-                  key={coin.current_price}
+                  key={coin.currentPrice}
                   initial={{ opacity: 0, y: -5 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
@@ -99,7 +99,7 @@ const MostProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
                     fontFamily: "Roboto, Arial, sans-serif",
                   }}
                 >
-                    {coin.current_price.toFixed(2)}
+                    {coin.currentPrice.toFixed(2)}
                     </motion.span>
                 <motion.span
                   initial={{ opacity: 0, y: -5 }}
@@ -107,7 +107,7 @@ const MostProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
                   transition={{ duration: 0.3 }}
                   style={{
                     color:
-                      coin.price_change_percentage_24h >= 0
+                      coin.priceChangePercentage24h >= 0
                         ? "#4CAF50"
                         : "#E53935",
                     fontWeight: "bold",
@@ -118,7 +118,7 @@ const MostProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
                     fontFamily: "Roboto, Arial, sans-serif",
                   }}
                 >
-                  {Math.round(coin.price_change_percentage_24h * 100) / 100}%
+                  {Math.round(coin.priceChangePercentage24h * 100) / 100}%
                 </motion.span>
               </ListItem>
             ))}
@@ -198,7 +198,7 @@ const MostProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
                     {coin.name}
                   </Typography>
                   <motion.span
-                    key={coin.current_price}
+                    key={coin.currentPrice}
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3 }}
@@ -209,17 +209,17 @@ const MostProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
                       fontFamily: "Roboto, Arial, sans-serif",
                     }}
                   >
-                    {coin.current_price.toFixed(2)}
+                    {coin.currentPrice.toFixed(2)}
                   </motion.span>
 
                   <motion.span
-                    key={coin.price_change_percentage_24h}
+                    key={coin.priceChangePercentage24h}
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3 }}
                     style={{
                       color:
-                        coin.price_change_percentage_24h >= 0
+                        coin.priceChangePercentage24h >= 0
                           ? "#4CAF50"
                           : "#E53935",
                       fontWeight: "bold",
@@ -230,7 +230,7 @@ const MostProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
                       fontFamily: "Roboto, Arial, sans-serif",
                     }}
                   >
-                  {Math.round(coin.price_change_percentage_24h * 100) / 100}%
+                  {Math.round(coin.priceChangePercentage24h * 100) / 100}%
                   </motion.span>
                 </ListItem>
               ))}

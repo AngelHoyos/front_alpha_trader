@@ -226,14 +226,14 @@ export const Register: React.FC = () => {
               Crear Registro
             </ButtonCustomLoad>
 
-            <div className="flex flex-row w-full items-center justify-center mt-5 gap-x-5">
+            {/* <div className="flex flex-row w-full items-center justify-center mt-5 gap-x-5">
               <ButtonCutoms
                 text="Google"
                 onClick={handleSubmitGoogle}
                 icon={faGoogle}
                 className="h-12"
               />
-            </div>
+            </div> */}
           </form>
         </motion.div>
       </motion.section>

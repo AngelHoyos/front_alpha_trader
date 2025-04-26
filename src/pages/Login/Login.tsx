@@ -133,14 +133,14 @@ const Login: React.FC = () => {
             <ButtonCustomLoad sx={{ width: "20%" }} type="submit">
               Iniciar Sesión
             </ButtonCustomLoad>
-            <div className="flex flex-row w-full items-center justify-center mt-5 gap-x-5">
+            {/* <div className="flex flex-row w-full items-center justify-center mt-5 gap-x-5">
               <ButtonCutoms
                 text="Google"
                 onClick={hanldeButton}
                 icon={faGoogle}
                 className="h-12"
               />
-            </div>
+            </div> */}
           </form>
         </motion.div>
         <motion.div

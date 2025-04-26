@@ -1,12 +1,9 @@
-import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
-
 export interface Coin {
   id: string;
-  icon: string;
-  moneda: string;
-  estado: string;
-  iconEstado: typeof faArrowUp | typeof faArrowDown;
-  valor: number;
+  image: string;
+  name: string;
+  currentPrice: number;
+  trend24h: "bullish" | "bearish" | "neutral"; // Define the possible trend values
 }
 
 export interface TopCoinsProps {

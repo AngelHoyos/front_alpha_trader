@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Paper,
@@ -20,8 +20,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { TipsModal } from "../../../components/Modals/ModalTipsAlphaX/ModalTipsAlphaX";
 import DotSpinner from "./components/DotSpinner/DotSpinner";
+import { useLocation } from "react-router";
 
 const AlphaX: React.FC = () => {
+  const location = useLocation();
   const {
     message,
     botReply,
@@ -49,6 +51,11 @@ const AlphaX: React.FC = () => {
     resetMessage: () => setMessage(""),
     setError,
   });
+  useEffect(() => {
+    if (location.state && location.state.question) {
+      setMessage(location.state.question);
+    }
+  }, [location.state, setMessage]);
 
   const handleSelectTip = (tip: string) => {
     setMessage(tip);
