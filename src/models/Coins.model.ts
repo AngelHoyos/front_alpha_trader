@@ -16,23 +16,17 @@ export interface Coins {
   id: string;
   name: string;
   symbol: string;
-  binance_symbol: string;
+  binanceSymbol: string;
   image: string;
-  market_cap: number;
-  market_cap_rank: number;
-  current_price:  number;
-  high_24h: number;
-  low_24h: number;
-  price_change_percentage_24h: number;
-  total_volume: number;
-
-  CapMerc?: string;
-  Id?: string;
-  Precio?: string;
-  Volumen?: string;
-  date?: string;
-  symbolo?: string;
-  symboloBinance?: string;
+  marketCap: number;
+  marketCapRank: number;
+  currentPrice: number;
+  high24h: number;
+  low24h: number;
+  priceChangePercentage24h: number;
+  totalVolume: number;
+  trend24h: string;
+  volumeQuote24h:number;
 }
 
 export interface CoinsCardProps {

@@ -3,8 +3,7 @@ import MostProminentCurrency from "./components/MostProminentCurrency/MostPromin
 import CoinsTable from "./components/TableHistoryCoin/CoinsTable";
 import { useSummary } from "../../../hooks/useSummary";
 import { useEffect } from "react";
-import { mergeCoinsData } from "../../../utils/mergeCoinsData";
-
+import PopularCoins from "./components/PopularCoins/PopularCoins";
 
 const sampleCoins = [
   {
@@ -55,12 +54,12 @@ const sampleCoins = [
 ];
 
 const Coins = () => {
-  const { getMainCoinsLiveData, mainCoinsData, mainCoinsDataUpdate } =
+  const { getMainCoinsLiveData, mainCoinsData} =
     useSummary();
+  
   useEffect(() => {
     getMainCoinsLiveData();
   }, []);
-  const mergeCoins = mergeCoinsData(mainCoinsData, mainCoinsDataUpdate);
 
   return (
     <Box sx={{ p: 3, pt: 0 }}>
@@ -71,9 +70,11 @@ const Coins = () => {
         mb={4}
         flexWrap="wrap"
       >
-        {/* <PopularCoins coins={popularCoins} /> */}
-        <MostProminentCurrency coins={mergeCoins} />
-        {/* <LessProminentCurrency coins={lessProminentCoins} /> */}
+        {/* <Box sx={{ width: 200, height: 100, border: '1px solid red', bgcolor: 'lightcoral' }}>Populares Placeholder</Box>
+            <Box sx={{ width: 200, height: 100, border: '1px solid blue', bgcolor: 'lightblue' }}>Prominentes Placeholder</Box> */}
+        <PopularCoins coins={mainCoinsData} />
+        <MostProminentCurrency coins={mainCoinsData} />
+        {/* <LessProminentCurrency coins={secondaryCoinsData} /> */}
       </Box>
       <Box sx={{ width: "100%", px: 3 }}>
         <Box

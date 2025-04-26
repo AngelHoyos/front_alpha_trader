@@ -4,7 +4,6 @@ import videoFondo from "../../../public/assets/video/fondo_register.mp4";
 import InputCustom from "../../components/Input/InputCustom";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import ButtonCutoms from "../../components/Button/ButtonCutoms";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import ModalTermsConditions from "../../components/Modals/ModalTermsConditions/ModalTermsConditions";
 import { useNavigates } from "../../hooks/useNavigates";
 import Alerts from "../../components/Alerts/Alerts";
@@ -24,7 +23,6 @@ export const Register: React.FC = () => {
     alerta,
     userData,
     acceptedTerms,
-    handleSubmitGoogle,
   } = useCreateRegister();
 
   const containerVariants = {
@@ -226,14 +224,14 @@ export const Register: React.FC = () => {
               Crear Registro
             </ButtonCustomLoad>
 
-            <div className="flex flex-row w-full items-center justify-center mt-5 gap-x-5">
+            {/* <div className="flex flex-row w-full items-center justify-center mt-5 gap-x-5">
               <ButtonCutoms
                 text="Google"
                 onClick={handleSubmitGoogle}
                 icon={faGoogle}
                 className="h-12"
               />
-            </div>
+            </div> */}
           </form>
         </motion.div>
       </motion.section>

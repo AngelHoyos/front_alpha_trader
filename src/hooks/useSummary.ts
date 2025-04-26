@@ -1,56 +1,81 @@
 import { useSocket } from "./useSocket";
-import {  useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Coins } from "../models/Coins.model";
+
+interface PreferenceData {
+  preferredSymbols?: string[];
+}
+
 export const useSummary = () => {
-  const { connect, emitEvent, disconnect,listenEvent } = useSocket();
+  const { connect, emitEvent, disconnect, listenEvent, removeListener } =
+    useSocket();
 
   const [secondaryCoinsData, setSecondaryCoinsData] = useState<Coins[]>([]);
-  const [secondaryCoinsDataUpdate, setSecondaryCoinsDataUpdate] = useState<
-    Coins[]
-  >([]);
   const [mainCoinsData, setMainCoinsData] = useState<Coins[]>([]);
-  const [mainCoinsDataUpdate, setMainCoinsDataUpdate] = useState<Coins[]>([]);
+  const [preferencesCoinsData, setPreferencesCoinsData] = useState<Coins[]>([]); // <--- nuevo estado
 
-  const getMainCoinsLiveData = () => {
+  const handleMainCoinsData = useCallback((data: { mainCoins: Coins[] }) => {
+    setMainCoinsData(data.mainCoins);
+  }, []);
+
+  const handleSecondaryCoinsData = useCallback((data: Coins[]) => {
+    setSecondaryCoinsData(data);
+  }, []);
+
+  const handlePreferencesData = useCallback((data: PreferenceData) => {
+    console.log(data);
+    
+    const symbols = data?.preferredSymbols || [];
+    if (symbols.length > 0) {
+      emitEvent("preferenceUpdate", { symbols });
+    }
+  }, [emitEvent]);
+
+  const handlePreferenceUpdate = useCallback((data: Coins[]) => {
+    setPreferencesCoinsData(data);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      removeListener("mainCoinsData", handleMainCoinsData);
+      removeListener("secondaryCoinsData", handleSecondaryCoinsData);
+      removeListener("preferencesData", handlePreferencesData);
+      removeListener("preferenceUpdate", handlePreferenceUpdate); // <--- quitar listener
+    };
+  }, [
+    removeListener,
+    handleMainCoinsData,
+    handleSecondaryCoinsData,
+    handlePreferencesData,
+    handlePreferenceUpdate,
+  ]);
+
+  const getMainCoinsLiveData = useCallback(() => {
     connect();
-
+    listenEvent("mainCoinsData", handleMainCoinsData);
     emitEvent("getMainCoinsLiveData");
+  }, [connect, emitEvent, listenEvent, handleMainCoinsData]);
 
-    listenEvent("mainCoinsLiveData", (data: { mainCoins: Coins[] }) => {
-      console.log(data.mainCoins);
-      
-      setMainCoinsData(data.mainCoins);
-    });
-
-    listenEvent("mainCoinsLiveUpdate", (update: Coins[]) => {
-      console.log(update);
-      
-      setMainCoinsDataUpdate(update);
-    });
-  };
-
-  const getSecondaryCoinsLiveData = () => {
+  const getSecondaryCoinsLiveData = useCallback(() => {
     connect();
+    listenEvent("secondaryCoinsData", handleSecondaryCoinsData);
     emitEvent("getSecondaryCoinsLiveData");
+  }, [connect, emitEvent, listenEvent, handleSecondaryCoinsData]);
 
-    listenEvent("secondaryCoinsLiveData", (data) => {
-      console.log("📡 Data secundarias recibida:", data);
-      setSecondaryCoinsData(data);
-    });
-
-    listenEvent("secondaryCoinsLiveUpdate", (data) => {
-      console.log("📡 Actualización secundarias:", data);
-      setSecondaryCoinsDataUpdate(data);
-    });
-  };
+  const getPreferencesAndUpdate = useCallback(() => {
+    connect();
+    listenEvent("preferencesData", handlePreferencesData);
+    listenEvent("preferenceUpdate", handlePreferenceUpdate); // <--- escuchar también preferenceUpdate
+    emitEvent("getLiveDataWithPreferences");
+  }, [connect, emitEvent, listenEvent, handlePreferencesData, handlePreferenceUpdate]);
 
   return {
     getMainCoinsLiveData,
     getSecondaryCoinsLiveData,
+    getPreferencesAndUpdate,
     disconnect,
     mainCoinsData,
-    mainCoinsDataUpdate,
-    secondaryCoinsData, 
-    secondaryCoinsDataUpdate,
+    secondaryCoinsData,
+    preferencesCoinsData, // <--- lo retornamos
   };
 };

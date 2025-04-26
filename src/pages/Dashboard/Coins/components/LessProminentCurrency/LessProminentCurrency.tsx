@@ -80,7 +80,7 @@ const LessProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
           <List>
             {coins.slice(0, 3).map((coin) => (
               <ListItem
-                key={coin.binance_symbol}
+                key={coin.binanceSymbol}
                 sx={{
                   borderRadius: 2,
                   display: "flex",
@@ -105,19 +105,19 @@ const LessProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
                 <Typography variant="body1" sx={{ flex: 1, ml: 2 }}>
                   {coin.name}
                 </Typography>
-                <Typography variant="body2">{coin.current_price}</Typography>
+                <Typography variant="body2">{coin.currentPrice}</Typography>
                 <Typography
                   variant="body2"
                   sx={{
                     color:
-                      coin.price_change_percentage_24h >= 0
+                      coin.priceChangePercentage24h >= 0
                         ? "#4CAF50"
                         : "#E53935",
                     fontWeight: "bold",
                     ml: 2,
                   }}
                 >
-                  {coin.price_change_percentage_24h}%
+                  {coin.priceChangePercentage24h}%
                 </Typography>
               </ListItem>
             ))}
@@ -183,20 +183,20 @@ const LessProminentCurrency: React.FC<CoinsCardProps> = ({ coins }) => {
                       {coin.name}
                     </Typography>
                     <Typography variant="body2">
-                      {coin.current_price}
+                      {coin.currentPrice}
                     </Typography>
                     <Typography
                       variant="body2"
                       sx={{
                         color:
-                          coin.price_change_percentage_24h >= 0
+                          coin.priceChangePercentage24h >= 0
                             ? "#4CAF50"
                             : "#E53935",
                         fontWeight: "bold",
                         ml: 2,
                       }}
                     >
-                      {coin.price_change_percentage_24h}%
+                      {coin.priceChangePercentage24h}%
                     </Typography>
                   </ListItem>
                 ))}

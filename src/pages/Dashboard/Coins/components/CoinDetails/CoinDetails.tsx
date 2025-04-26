@@ -1,55 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import CryptoChart from "../../../../../components/Charts/Area/AreaChart";
-import CryptoConverter from "../CrytoConverter/CryptoConverter";
 import CoinsTable from "../TableHistoryCoin/CoinsTable";
 import { Coin } from "../../../../../models/Coins.model";
+import { IntervalKey } from "../../../../../models/Chart.model";
+import { useChart } from "../../../../../hooks/useChart";
 
 const CoinDetails: React.FC = () => {
-   const cryptoData = {
-    dia: [
-      { time: "10:00 AM", price: 45000 },
-      { time: "10:10 AM", price: 45250 },
-      { time: "10:20 AM", price: 44980 },
-      { time: "10:30 AM", price: 45400 },
-      { time: "10:40 AM", price: 45520 },
-      { time: "10:50 AM", price: 45310 },
-      { time: "11:00 AM", price: 45670 },
-    ],
-    semana: [
-      { time: "Lunes", price: 44000 },
-      { time: "Martes", price: 44550 },
-      { time: "Miércoles", price: 44800 },
-      { time: "Jueves", price: 44620 },
-      { time: "Viernes", price: 45010 },
-      { time: "Sábado", price: 45200 },
-      { time: "Domingo", price: 45500 },
-    ],
-    mes: [
-      { time: "1 Mar", price: 43000 },
-      { time: "5 Mar", price: 43750 },
-      { time: "10 Mar", price: 43900 },
-      { time: "15 Mar", price: 44200 },
-      { time: "20 Mar", price: 44600 },
-      { time: "25 Mar", price: 44950 },
-      { time: "30 Mar", price: 45200 },
-    ],
-    año: [
-      { time: "Ene", price: 39000 },
-      { time: "Feb", price: 41000 },
-      { time: "Mar", price: 43000 },
-      { time: "Abr", price: 45500 },
-      { time: "May", price: 47000 },
-      { time: "Jun", price: 46000 },
-      { time: "Jul", price: 48000 },
-      { time: "Ago", price: 49500 },
-      { time: "Sep", price: 50000 },
-      { time: "Oct", price: 51000 },
-      { time: "Nov", price: 52500 },
-      { time: "Dic", price: 54000 },
-    ],
-  };
-  
+ 
+
   const bitcoinMovements: Coin[] = [
     {
       date: "2025-04-01 14:00",
@@ -92,6 +51,55 @@ const CoinDetails: React.FC = () => {
       marketCap: "$1.34T",
     },
   ];
+  const [valueName, setValueName] = useState("bitcoin");
+  const [intervals, setIntervals] = useState<IntervalKey>("1m");
+  const [ListCoin, setListCoin] = useState<string[]>([]);
+  const {
+    rawCryptoData,
+
+    getDetailsCrypto,
+  } = useChart();
+  useEffect(() => {
+    if (valueName && intervals) {
+      getDetailsCrypto(valueName, intervals);
+    }
+  }, [valueName, intervals]);
+  useEffect(() => {
+    if (rawCryptoData && rawCryptoData.preferredSymbols) {
+      setListCoin(rawCryptoData.preferredSymbols);
+    }
+  }, [rawCryptoData]);
+
+  const transformatedData =
+    rawCryptoData && rawCryptoData.klines
+      ? rawCryptoData.klines.map((data: any) => {
+          return {
+            time: new Date(data.openTime).toLocaleDateString(),
+            price: data.currentPrice,
+          };
+        })
+      : [];
+
+  const intervalsList = ["1d", "1w", "1m", "1y"];
+
+  const structuredData = Object.fromEntries(
+    intervalsList.map((key) => [
+      key,
+      key === intervals ? transformatedData : [],
+    ])
+  );
+
+  const handleChartSettingsChange = ({
+    interval,
+    preferredCoin,
+  }: {
+    interval: IntervalKey;
+    chartType: "area" | "line";
+    preferredCoin: string;
+  }) => {
+    setIntervals(interval);
+    setValueName(preferredCoin);
+  };
 
   return (
     <Box
@@ -112,24 +120,27 @@ const CoinDetails: React.FC = () => {
             (BTC)
           </Typography>
         </Typography>
-        <Typography variant="subtitle1" sx={{ mt: 1, color: "#b0b0b0" }}>
+        {/* <Typography variant="subtitle1" sx={{ mt: 1, color: "#b0b0b0" }}>
           1 BTC equivale a <strong>USD $20.00</strong>
-        </Typography>
+        </Typography> */}
       </Box>
       <Box
         sx={{
           display: "flex",
           flexDirection: "row",
+          justifyContent: "center",
           gap: 3,
           width: "100%",
         }}
       >
         <CryptoChart
-          title=""
-          backgroundColor="rgba(81,20,166,0.45)"
-          data={cryptoData}
+          title="Analisis"
+          data={structuredData}
+          preferredCoin={valueName}
+          setPreferredCoin={(coin) => setValueName(coin)}
+          onChartSettingsChange={handleChartSettingsChange}
         />
-        <CryptoConverter />
+        {/* <CryptoConverter /> */}
       </Box>
       <Box
         sx={{

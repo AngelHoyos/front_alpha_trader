@@ -2,15 +2,21 @@ import { useState } from "react";
 import { DataUser } from "../models/DataUserRegister.model";
 import axiosInstance from "../api/axiosInstance/axiosInstance";
 import { useAuth } from "./useAuth";
-type Severity = 'error' | 'info' | 'success' | 'warning';
+type Severity = "error" | "info" | "success" | "warning";
 
 interface Message {
   text: string;
   type: Severity;
 }
+interface ImageProfileResponse {
+  status: boolean;
+  message: string;
+  imageUrl: string;
+  user: DataUser;
+}
 
 export const useUserProfileForm = (initialData: DataUser) => {
-  const { token } = useAuth();
+  const { token, setUserData, userData } = useAuth();
   const [formData, setFormData] = useState<DataUser>(initialData);
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<Message>({
@@ -18,10 +24,23 @@ export const useUserProfileForm = (initialData: DataUser) => {
     type: "info",
   });
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setPasswordData((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -34,116 +53,66 @@ export const useUserProfileForm = (initialData: DataUser) => {
     }
   };
 
-  const handleUpdateUser = async () => {
-    try {
-      setLoading(true);
-      setMessage({ text: "", type: "info" });
+  const updateProfilePicture = async () => {
+    const formImage = new FormData();
+    formImage.append("profilePicture", profilePicture as File);
 
-      const response = await axiosInstance.put(`/user/profile`, formData, {
+    const response = await axiosInstance.put<ImageProfileResponse>(
+      `/user/imageProfile`,
+      formImage,
+      {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
-      });
-
-      if (response.status === 200) {
-        setMessage({
-          text: "Usuario actualizado con éxito.",
-          type: "success",
-        });
-        console.log("Usuario actualizado con éxito", response.data);
       }
-    } catch (err) {
-      setMessage({
-        text: "Error al actualizar la información del usuario.",
-        type: "error",
+    );
+    const updatedUserData = response.data.imageUrl;
+    if (userData) {
+      setUserData({
+        ...userData,
+        profilePicture: updatedUserData,
       });
-      console.error("Error al actualizar:", err);
-    } finally {
-      setLoading(false);
     }
+    return response;
   };
 
-  const handleUpdateProfilePicture = async () => {
-    if (!profilePicture) {
-      setMessage({
-        text: "Por favor, selecciona una imagen.",
-        type: "error",
-      });
-      return;
-    }
+  
+
+  const handleSubmitAll = async () => {
+    setLoading(true);
+    setMessage({ text: "", type: "info" });
 
     try {
-      const formImage = new FormData();
-      formImage.append("profilePicture", profilePicture);
-
-      setLoading(true);
-      setMessage({ text: "", type: "info" });
-
-      const response = await axiosInstance.put(
-        `/user/imageProfile`,
-        formImage,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        setMessage({
-          text: "Foto de perfil actualizada con éxito.",
-          type: "success",
-        });
-        console.log("Foto de perfil actualizada con éxito", response.data);
+      if (profilePicture) {
+        await updateProfilePicture();
       }
-    } catch (err) {
+
+      // if (
+      //   passwordData.currentPassword &&
+      //   passwordData.newPassword &&
+      //   passwordData.confirmPassword
+      // ) {
+      //   await updatePassword();
+      // }
+
       setMessage({
-        text: "Error al actualizar la foto de perfil.",
+        text: "Perfil actualizado con éxito.",
+        type: "success",
+      });
+
+      // Ya no forzamos reload. Solo si quieres de verdad recargar, lo dejas:
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 1000);
+    } catch (err: any) {
+      setMessage({
+        text:
+          err.response?.data?.message ||
+          err.message ||
+          "Error al actualizar el perfil.",
         type: "error",
       });
-      console.error("Error al actualizar foto de perfil:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleUpdatePassword = async () => {
-    if (!formData.Password) {
-      setMessage({
-        text: "La contraseña no puede estar vacía.",
-        type: "error",
-      });
-      return;
-    }
-
-    try {
-      setLoading(true);
-      setMessage({ text: "", type: "info" });
-
-      const response = await axiosInstance.put(
-        `/user/password`,
-        { Password: formData.Password },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        setMessage({
-          text: "Contraseña actualizada con éxito.",
-          type: "success",
-        });
-        console.log("Contraseña actualizada con éxito", response.data);
-      }
-    } catch (err) {
-      setMessage({
-        text: "Error al actualizar la contraseña.",
-        type: "error",
-      });
-      console.error("Error al actualizar contraseña:", err);
     } finally {
       setLoading(false);
     }
@@ -151,13 +120,13 @@ export const useUserProfileForm = (initialData: DataUser) => {
 
   return {
     formData,
+    passwordData,
+    profilePicture,
     handleChange,
-    handleUpdateUser,
+    handlePasswordChange,
     handleFileChange,
-    handleUpdateProfilePicture,
-    handleUpdatePassword, 
+    handleSubmitAll,
     loading,
     message,
-    profilePicture,
   };
 };

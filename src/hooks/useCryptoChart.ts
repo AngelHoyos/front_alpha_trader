@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
-import { TypesProps } from "../models/Chart.model";
+import { IntervalKey, TypesProps } from "../models/Chart.model";
 
-const useCryptoChart = (data: TypesProps) => {
+const useCryptoChart = (
+  data: TypesProps
+) => {
   const validIntervals = Object.keys(data).filter(
-    (key) => data[key as keyof TypesProps]?.length
-  ) as (keyof TypesProps)[];
+    (key) => data[key as IntervalKey]?.length
+  ) as IntervalKey[];
 
-  const [interval, setInterval] = useState<keyof TypesProps>(
-    validIntervals[0] ?? "dia"
+  const [interval, setInterval] = useState<IntervalKey>(
+    validIntervals[0] ?? "1d"
   );
-  
+
   const [chartType, setChartType] = useState<"area" | "line">("area");
   const [minPrice, setMinPrice] = useState<number | null>(null);
   const [maxPrice, setMaxPrice] = useState<number | null>(null);

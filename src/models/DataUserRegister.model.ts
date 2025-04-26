@@ -8,8 +8,8 @@ export interface DataUser {
   
     Status?: boolean;
     coinsList?: Array<string>;
-    googleId?: string;
-    facebookId?: string;
+    googleId?: string | null;
+    facebookId?: string | null;
     acceptedTerms?: boolean;
   }
   export interface ApiResponse<T> {
