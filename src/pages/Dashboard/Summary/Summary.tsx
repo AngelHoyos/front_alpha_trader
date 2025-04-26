@@ -4,19 +4,17 @@ import TopCoins from "./components/TopCoins/TopCoins";
 import CryptoChart from "../../../components/Charts/Area/AreaChart";
 import CardAds from "../../../components/CardAds/CardAds";
 import ImgCard from "../../../../public/assets/imgs/img1.png";
-import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { useChart } from "../../../hooks/useChart";
-import { use, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { IntervalKey } from "../../../models/Chart.model";
 import { useSummary } from "../../../hooks/useSummary";
 const Summary = () => {
   const [valueName, setValueName] = useState("bitcoin");
   const [intervals, setIntervals] = useState<IntervalKey>("1m");
   const [ListCoin, setListCoin] = useState<string[]>([]);
-  const [InformationCoin, setInformationCoin] = useState([]);
   const {
     rawCryptoData,
-    
+
     getDetailsCrypto,
   } = useChart();
   const coinHistoryData = [
@@ -53,72 +51,7 @@ const Summary = () => {
       valor: 2.8,
     },
   ];
-  const dummyCoins = [
-    {
-      id: "btc",
-      icon: "🟡",
-      moneda: "Bitcoin",
-      estado: "subió",
-      iconEstado: faArrowUp,
-      valor: 0.23,
-    },
-    {
-      id: "eth",
-      icon: "🔵",
-      moneda: "Ethereum",
-      estado: "bajó",
-      iconEstado: faArrowDown,
-      valor: -1.8,
-    },
-    {
-      id: "bnb",
-      icon: "🟢",
-      moneda: "Binance Coin",
-      estado: "subió",
-      iconEstado: faArrowUp,
-      valor: 3.5,
-    },
-    {
-      id: "bnb",
-      icon: "🟢",
-      moneda: "Binance Coin",
-      estado: "subió",
-      iconEstado: faArrowUp,
-      valor: 3.5,
-    },
-    {
-      id: "bnb",
-      icon: "🟢",
-      moneda: "Binance Coin",
-      estado: "subió",
-      iconEstado: faArrowUp,
-      valor: 3.5,
-    },
-    {
-      id: "bnb",
-      icon: "🟢",
-      moneda: "Binance Coin",
-      estado: "subió",
-      iconEstado: faArrowUp,
-      valor: 3.5,
-    },
-    {
-      id: "bnb",
-      icon: "🟢",
-      moneda: "Binance Coin",
-      estado: "subió",
-      iconEstado: faArrowUp,
-      valor: 3.5,
-    },
-    {
-      id: "bnb",
-      icon: "🟢",
-      moneda: "Binance Coin",
-      estado: "subió",
-      iconEstado: faArrowUp,
-      valor: 3.5,
-    },
-  ];
+
   useEffect(() => {
     if (valueName && intervals) {
       getDetailsCrypto(valueName, intervals);
@@ -187,7 +120,7 @@ const Summary = () => {
         }}
       >
         <CryptoChart
-          title="Analisis"
+          title=""
           data={structuredData}
           preferredCoin={valueName}
           setPreferredCoin={(coin) => setValueName(coin)}

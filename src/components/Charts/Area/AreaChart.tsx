@@ -10,7 +10,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { Box, Typography, Card } from "@mui/material";
+import { Box, Typography, Card, CircularProgress } from "@mui/material";
 import { motion } from "framer-motion";
 import useCryptoChart from "../../../hooks/useCryptoChart";
 import { CryptoChartProps } from "../../../models/Chart.model";
@@ -37,18 +37,18 @@ const CryptoChart: React.FC<CryptoChartProps> = ({
   onChartSettingsChange, 
   listCoin,
 }) => {
-  const { interval, setInterval, chartType, setChartType, minPrice, maxPrice } =
-    useCryptoChart(data);
+  const { interval, setInterval, chartType, setChartType, minPrice, maxPrice } = useCryptoChart(data);
 
-  // Estado para controlar los datos del gráfico
   const [chartData, setChartData] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true); // 🔥 Estado para controlar carga
 
   useEffect(() => {
     onChartSettingsChange?.({ interval, chartType, preferredCoin });
   }, [interval, chartType, preferredCoin]);
 
-  // Limpiar y formatear los datos al recibir nuevos
   useEffect(() => {
+    setLoading(true); // empieza cargando
+
     if (data[interval] && data[interval].length > 0) {
       const newData = data[interval].map((d) => ({
         ...d,
@@ -56,41 +56,27 @@ const CryptoChart: React.FC<CryptoChartProps> = ({
           ? 0
           : parseFloat(d.price.toFixed(0)),
       }));
-      setChartData(newData);
-    }
-  }, [data, interval]); // Se ejecuta cuando los datos o el intervalo cambian
 
-  const chart = (
+      setChartData(newData);
+
+      // Un micro delay para suavizar la carga (opcional)
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
+    } else {
+      setLoading(false); // si no hay data, igual desactiva loading
+    }
+  }, [data, interval]);
+
+  const renderChart = () => (
     <ResponsiveContainer width="100%" height={400}>
       {chartType === "area" ? (
-        <AreaChart
-          data={chartData}
-          margin={{ top: 10, right: 30, left: 50, bottom: 20 }}
-        >
-          <CartesianGrid
-            strokeDasharray="3 3"
-            stroke="rgba(255,255,255,0.2)"
-            vertical={false}
-          />
-          <XAxis
-            dataKey="time"
-            tick={{ fill: "white" }}
-            tickMargin={10}
-            tickLine={false}
-            dy={5}
-          />
-          <YAxis
-            domain={[minPrice ?? "auto", maxPrice ?? "auto"]}
-            tickFormatter={formatCurrency}
-            tick={{ fill: "white" }}
-          />
+        <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 50, bottom: 20 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.2)" vertical={false} />
+          <XAxis dataKey="time" tick={{ fill: "white" }} tickMargin={10} tickLine={false} dy={5} />
+          <YAxis domain={[minPrice ?? "auto", maxPrice ?? "auto"]} tickFormatter={formatCurrency} tick={{ fill: "white" }} />
           <Tooltip formatter={(value) => formatCurrency(value as number)} />
-          <Area
-            type="monotone"
-            dataKey="price"
-            stroke="#571773"
-            fill="url(#gradient)"
-          />
+          <Area type="monotone" dataKey="price" stroke="#571773" fill="url(#gradient)" />
           <defs>
             <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
               <stop offset="0%" stopColor="#571773" stopOpacity={1} />
@@ -101,23 +87,10 @@ const CryptoChart: React.FC<CryptoChartProps> = ({
           </defs>
         </AreaChart>
       ) : (
-        <LineChart
-          data={chartData}
-          margin={{ top: 10, right: 30, left: 50, bottom: 20 }}
-        >
+        <LineChart data={chartData} margin={{ top: 10, right: 30, left: 50, bottom: 20 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.2)" />
-          <XAxis
-            dataKey="time"
-            tick={{ fill: "white" }}
-            tickMargin={10}
-            tickLine={false}
-            dy={5}
-          />
-          <YAxis
-            domain={[minPrice ?? 0, maxPrice ?? "auto"]}
-            tickFormatter={formatCurrency}
-            tick={{ fill: "white" }}
-          />
+          <XAxis dataKey="time" tick={{ fill: "white" }} tickMargin={10} tickLine={false} dy={5} />
+          <YAxis domain={[minPrice ?? 0, maxPrice ?? "auto"]} tickFormatter={formatCurrency} tick={{ fill: "white" }} />
           <Tooltip formatter={(value) => formatCurrency(value as number)} />
           <Line type="monotone" dataKey="price" stroke="#5114A6" />
         </LineChart>
@@ -125,7 +98,7 @@ const CryptoChart: React.FC<CryptoChartProps> = ({
     </ResponsiveContainer>
   );
 
-  if (isSimple) return chart;
+  if (isSimple) return loading ? <LoadingSpinner /> : renderChart();
 
   return (
     <Card
@@ -173,11 +146,21 @@ const CryptoChart: React.FC<CryptoChartProps> = ({
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: 400 }}
       >
-        {chart}
+        {loading ? <LoadingSpinner /> : renderChart()}
       </MotionBox>
     </Card>
   );
 };
+
+const LoadingSpinner = () => (
+  <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <CircularProgress sx={{ color: "#5114A6", mb: 2 }} />
+    <Typography variant="body2" sx={{ color: "white" }}>
+      Cargando datos...
+    </Typography>
+  </Box>
+);
 
 export default CryptoChart;

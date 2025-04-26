@@ -12,7 +12,7 @@ interface ChartSelectorWrapperProps {
   intervals: (keyof TypesProps)[];
   preferredCoin: string;
   setPreferredCoin: (value: string) => void;
-  coins: string[];
+  coins?: string[];
 }
 
 const ChartSelectorWrapper: React.FC<ChartSelectorWrapperProps> = ({

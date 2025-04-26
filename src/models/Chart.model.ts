@@ -18,7 +18,7 @@ export interface CryptoChartProps {
   backgroundColor?: string;
   isSimple?: boolean;
   preferredCoin: string;
-  listCoin:string[];
+  listCoin?:string[];
   setPreferredCoin: (coin: string) => void;
   onChartSettingsChange?: (settings: {
     interval: IntervalKey;

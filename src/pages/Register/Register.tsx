@@ -4,7 +4,6 @@ import videoFondo from "../../../public/assets/video/fondo_register.mp4";
 import InputCustom from "../../components/Input/InputCustom";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import ButtonCutoms from "../../components/Button/ButtonCutoms";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import ModalTermsConditions from "../../components/Modals/ModalTermsConditions/ModalTermsConditions";
 import { useNavigates } from "../../hooks/useNavigates";
 import Alerts from "../../components/Alerts/Alerts";
@@ -24,7 +23,6 @@ export const Register: React.FC = () => {
     alerta,
     userData,
     acceptedTerms,
-    handleSubmitGoogle,
   } = useCreateRegister();
 
   const containerVariants = {

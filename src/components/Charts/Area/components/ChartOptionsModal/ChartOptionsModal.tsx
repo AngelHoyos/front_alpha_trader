@@ -15,7 +15,7 @@ interface ChartOptionsModalProps {
   intervals: (keyof TypesProps)[];
   preferredCoin: string;
   setPreferredCoin: (value: string) => void;
-  coins: string[];
+  coins?: string[];
 }
 
 

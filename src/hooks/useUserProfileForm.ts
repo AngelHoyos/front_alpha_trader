@@ -77,29 +77,7 @@ export const useUserProfileForm = (initialData: DataUser) => {
     return response;
   };
 
-  const updatePassword = async () => {
-    const { currentPassword, newPassword, confirmPassword } = passwordData;
-
-    if (newPassword !== confirmPassword) {
-      throw new Error("Las nuevas contraseñas no coinciden.");
-    }
-    const email = formData?.Email;
-    const response = await axiosInstance.post(
-      `/auth/password-change`,
-      {
-        token: `${token}`,
-        password: currentPassword,
-        passwordConfirmation: confirmPassword,
-        email: email,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response;
-  };
+  
 
   const handleSubmitAll = async () => {
     setLoading(true);

@@ -4,7 +4,6 @@ import videoFondo from "../../../public/assets/video/fondo_register.mp4";
 import { motion } from "motion/react";
 import InputCustom from "../../components/Input/InputCustom";
 import ButtonCutoms from "../../components/Button/ButtonCutoms";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { useAuthLogin } from "../../hooks/useAuthLogin";
 import { useNavigates } from "../../hooks/useNavigates";
 import { ButtonCustomLoad } from "../../components/Button/ButtonCustomLoad";

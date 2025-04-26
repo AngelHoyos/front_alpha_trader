@@ -184,7 +184,7 @@ const Profile: React.FC = () => {
           <StyledTabs value={tabIndex} onChange={handleTabChange} centered>
             <StyledTab label="Estado de Cuenta" />
             <StyledTab label="Actividad Reciente" />
-            <StyledTab label="Moneda Preferida" />
+            {/* <StyledTab label="Moneda Preferida" /> */}
           </StyledTabs>
         </Box>
 

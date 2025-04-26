@@ -54,7 +54,7 @@ const TopCoins: React.FC<TopCoinsProps> = ({ coinsData }) => {
       <Box
         sx={{
           overflowY: 'auto', // Enable vertical scrolling only when needed
-          maxHeight: '400px', // Define a max height for the list area (adjust as needed)
+          maxHeight: '00px', // Define a max height for the list area (adjust as needed)
           // Add some padding to the right to prevent scrollbar overlap if needed
           pr: 1, // Padding right for scrollbar spacing
           // Ensure the box grows if content is less than maxHeight but card has space
