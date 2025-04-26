@@ -1,29 +1,62 @@
-import  { useState } from "react";
+import { useEffect, useState } from "react";
 import FixedDrawer from "../../components/FixedDrawer/FixedDrawer";
-import { Box, Button } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Modal,
+  Typography,
+} from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell, faMoneyBillTransfer } from "@fortawesome/free-solid-svg-icons";
-import { useNavigates } from "../../hooks/useNavigates";
-import { Outlet, useLocation } from "react-router-dom";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { Outlet } from "react-router-dom"; // Importamos Navigate para redirigir
 import ModalNotication from "../../components/Modals/ModalNotification/ModalNotication";
 import { Notification } from "../../models/Notification.model";
+import { useDashboard } from "../../hooks/useDashboard";
+import ModalProfilePreferences from "./components/ModalProfilePrefences/ModalProfilePreferences";
+
 const Dashboard = () => {
-  const { goTo } = useNavigates();
-  const location = useLocation();
   const [open, setOpen] = useState(false);
+  const { isAuthorized } = useDashboard();
   const [notifications, setNotifications] = useState<Notification[]>([
     { title: "Nuevo Mensaje", message: "Tienes una nueva notificación." },
     { title: "Actualización", message: "Se ha actualizado tu perfil." },
   ]);
+  const [openAccessModal, setOpenAccessModal] = useState<boolean>(false);
 
   const handleRemoveNotification = (index: number) => {
     setNotifications(notifications.filter((_, i) => i !== index));
   };
-  const mostrarButton = location.pathname === "/dashboard/coin";
+  useEffect(() => {
+    if (isAuthorized === false) {
+      setOpenAccessModal(true);
+    }
+  }, [isAuthorized]);
+
+  if (isAuthorized === null) {
+    return (
+      <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: "rgba(0, 0, 0, 0.7)", // Fondo semitransparente
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress color="primary" size={50} />
+      </Box>
+    );
+  }
+
   return (
     <Box
       sx={{
-        backgroundColor: "#000317",
+        backgroundColor: "#000411",
         position: "absolute",
         width: "100%",
         height: "100%",
@@ -39,7 +72,7 @@ const Dashboard = () => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          width: "87%",
+          width: "calc(100% - 50px)",
         }}
       >
         <Box
@@ -54,24 +87,6 @@ const Dashboard = () => {
           <Box
             sx={{ display: "flex", flexDirection: "row", paddingRight: "15px" }}
           >
-            {mostrarButton && (
-              <Button
-                onClick={() => goTo("summary")}
-                sx={{
-                  margin: "auto 8px",
-                  padding: "10px 6px",
-                  backgroundColor: "rgba(87, 23, 115,0.51)",
-                  color: "white",
-                  border: "1px solid #571773",
-                  "&:hover": { border: "1px solid #5114A6" },
-                }}
-              >
-                <FontAwesomeIcon
-                  icon={faMoneyBillTransfer}
-                  className="text-xl"
-                />
-              </Button>
-            )}
             <Button
               onClick={() => setOpen(true)}
               sx={{
@@ -92,10 +107,18 @@ const Dashboard = () => {
             />
           </Box>
         </Box>
-        <Box sx={{ width: "100%", height: "89%" }}>
+
+        {/* Si el usuario está autorizado, renderizamos el Outlet */}
+        <Box sx={{ width: "100%", height: "89%", boxShadow: "none" }}>
           <Outlet />
         </Box>
       </Box>
+      {isAuthorized === false && (
+        <ModalProfilePreferences
+          open={openAccessModal}
+          onClose={() => setOpenAccessModal(false)}
+        />
+      )}
     </Box>
   );
 };

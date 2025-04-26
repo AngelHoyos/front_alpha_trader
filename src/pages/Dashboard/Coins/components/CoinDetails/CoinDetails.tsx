@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import CryptoChart from "../../../../../components/Charts/Area/AreaChart";
 import CryptoConverter from "../CrytoConverter/CryptoConverter";
 import CoinsTable from "../TableHistoryCoin/CoinsTable";
 import { Coin } from "../../../../../models/Coins.model";
+import { IntervalKey } from "../../../../../models/Chart.model";
+import { useChart } from "../../../../../hooks/useChart";
 
 const CoinDetails: React.FC = () => {
-   const cryptoData = {
+  const cryptoData = {
     dia: [
       { time: "10:00 AM", price: 45000 },
       { time: "10:10 AM", price: 45250 },
@@ -49,7 +51,7 @@ const CoinDetails: React.FC = () => {
       { time: "Dic", price: 54000 },
     ],
   };
-  
+
   const bitcoinMovements: Coin[] = [
     {
       date: "2025-04-01 14:00",
@@ -92,6 +94,55 @@ const CoinDetails: React.FC = () => {
       marketCap: "$1.34T",
     },
   ];
+  const [valueName, setValueName] = useState("bitcoin");
+  const [intervals, setIntervals] = useState<IntervalKey>("1m");
+  const [ListCoin, setListCoin] = useState<string[]>([]);
+  const {
+    rawCryptoData,
+
+    getDetailsCrypto,
+  } = useChart();
+  useEffect(() => {
+    if (valueName && intervals) {
+      getDetailsCrypto(valueName, intervals);
+    }
+  }, [valueName, intervals]);
+  useEffect(() => {
+    if (rawCryptoData && rawCryptoData.preferredSymbols) {
+      setListCoin(rawCryptoData.preferredSymbols);
+    }
+  }, [rawCryptoData]);
+
+  const transformatedData =
+    rawCryptoData && rawCryptoData.klines
+      ? rawCryptoData.klines.map((data: any) => {
+          return {
+            time: new Date(data.openTime).toLocaleDateString(),
+            price: data.currentPrice,
+          };
+        })
+      : [];
+
+  const intervalsList = ["1d", "1w", "1m", "1y"];
+
+  const structuredData = Object.fromEntries(
+    intervalsList.map((key) => [
+      key,
+      key === intervals ? transformatedData : [],
+    ])
+  );
+
+  const handleChartSettingsChange = ({
+    interval,
+    preferredCoin,
+  }: {
+    interval: IntervalKey;
+    chartType: "area" | "line";
+    preferredCoin: string;
+  }) => {
+    setIntervals(interval);
+    setValueName(preferredCoin);
+  };
 
   return (
     <Box
@@ -125,9 +176,12 @@ const CoinDetails: React.FC = () => {
         }}
       >
         <CryptoChart
-          title=""
-          backgroundColor="rgba(81,20,166,0.45)"
-          data={cryptoData}
+          title="Analisis"
+          data={structuredData}
+          preferredCoin={valueName}
+          setPreferredCoin={(coin) => setValueName(coin)}
+          onChartSettingsChange={handleChartSettingsChange}
+          listCoin={ListCoin}
         />
         <CryptoConverter />
       </Box>

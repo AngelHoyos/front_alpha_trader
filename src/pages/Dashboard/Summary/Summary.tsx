@@ -5,7 +5,20 @@ import CryptoChart from "../../../components/Charts/Area/AreaChart";
 import CardAds from "../../../components/CardAds/CardAds";
 import ImgCard from "../../../../public/assets/imgs/img1.png";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { useChart } from "../../../hooks/useChart";
+import { use, useEffect, useState } from "react";
+import { IntervalKey } from "../../../models/Chart.model";
+import { useSummary } from "../../../hooks/useSummary";
 const Summary = () => {
+  const [valueName, setValueName] = useState("bitcoin");
+  const [intervals, setIntervals] = useState<IntervalKey>("1m");
+  const [ListCoin, setListCoin] = useState<string[]>([]);
+  const [InformationCoin, setInformationCoin] = useState([]);
+  const {
+    rawCryptoData,
+    
+    getDetailsCrypto,
+  } = useChart();
   const coinHistoryData = [
     {
       id: 1,
@@ -40,55 +53,6 @@ const Summary = () => {
       valor: 2.8,
     },
   ];
-
-  const generateCryptoData = (
-    initialPrice: number,
-    variations: string[],
-    volatility: number
-  ) => {
-    let price = initialPrice;
-    return variations.map((time) => {
-      // Genera una variación aleatoria dentro del rango de volatilidad
-      const change = Math.random() * volatility * 2 - volatility;
-      price = Math.max(40000, price + change); // Asegura que no baje de 40,000
-      return { time, price: parseFloat(price.toFixed(2)) }; // Redondear a 2 decimales
-    });
-  };
-
-  const cryptoData = {
-    dia: generateCryptoData(
-      45000,
-      [
-        "10:00 AM",
-        "10:10 AM",
-        "10:20 AM",
-        "10:30 AM",
-        "10:40 AM",
-        "10:50 AM",
-        "11:00 AM",
-      ],
-      800
-    ),
-    semana: generateCryptoData(
-      44000,
-      [
-        "Lunes",
-        "Martes",
-        "Miércoles",
-        "Jueves",
-        "Viernes",
-        "Sábado",
-        "Domingo",
-      ],
-      2000
-    ),
-    mes: generateCryptoData(
-      43000,
-      ["1 Mar", "5 Mar", "10 Mar", "15 Mar", "20 Mar", "25 Mar", "30 Mar"],
-      5000
-    ),
-  };
-
   const dummyCoins = [
     {
       id: "btc",
@@ -155,6 +119,54 @@ const Summary = () => {
       valor: 3.5,
     },
   ];
+  useEffect(() => {
+    if (valueName && intervals) {
+      getDetailsCrypto(valueName, intervals);
+    }
+  }, [valueName, intervals]);
+
+  const { getMainCoinsLiveData,mainCoinsData } = useSummary();
+  useEffect(() => {
+    getMainCoinsLiveData();
+  }, []);
+
+  useEffect(() => {
+    if (rawCryptoData && rawCryptoData.preferredSymbols) {
+      setListCoin(rawCryptoData.preferredSymbols);
+    }
+  }, [rawCryptoData]);
+
+
+  const transformatedData =
+    rawCryptoData && rawCryptoData.klines
+      ? rawCryptoData.klines.map((data: any) => {
+          return {
+            time: new Date(data.openTime).toLocaleDateString(),
+            price: data.currentPrice,
+          };
+        })
+      : [];
+
+  const intervalsList = ["1d", "1w", "1m", "1y"];
+
+  const structuredData = Object.fromEntries(
+    intervalsList.map((key) => [
+      key,
+      key === intervals ? transformatedData : [],
+    ])
+  );
+
+  const handleChartSettingsChange = ({
+    interval,
+    preferredCoin,
+  }: {
+    interval: IntervalKey;
+    chartType: "area" | "line";
+    preferredCoin: string;
+  }) => {
+    setIntervals(interval);
+    setValueName(preferredCoin);
+  };
 
   return (
     <Box
@@ -166,7 +178,6 @@ const Summary = () => {
         px: 2,
       }}
     >
-      {/* Contenedor Principal (Gráficos y Tabla) */}
       <Box
         sx={{
           flex: 3,
@@ -177,7 +188,11 @@ const Summary = () => {
       >
         <CryptoChart
           title="Analisis"
-          data={cryptoData}
+          data={structuredData}
+          preferredCoin={valueName}
+          setPreferredCoin={(coin) => setValueName(coin)}
+          onChartSettingsChange={handleChartSettingsChange}
+          listCoin={ListCoin}
         />
         <HistoryTable data={coinHistoryData} />
       </Box>
@@ -191,8 +206,13 @@ const Summary = () => {
           gap: 2,
         }}
       >
-        <CardAds img={ImgCard} title="Potencia tu inversión con Alpha X" />
-        <TopCoins coinsData={dummyCoins} />
+        <CardAds
+          img={ImgCard}
+          title="Potencia tu inversión con Alpha X"
+          targetPath={"/dashboard/Alpha_X"}
+          predeterminedQuestion={"Como puedo potenciar mi inversión?"}
+        />
+        <TopCoins coinsData={mainCoinsData} />
       </Box>
     </Box>
   );

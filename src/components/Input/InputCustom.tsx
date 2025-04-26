@@ -14,11 +14,13 @@ const InputCustom: React.FC<InputCustomProps> = ({
   InputLabelProps,
   error,
   helperText,
+  inputRef,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <CustomTextField
+      inputRef={inputRef}
       label={label}
       name={name}
       type={type === "password" ? (showPassword ? "text" : "password") : type}

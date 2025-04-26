@@ -1,40 +1,65 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Paper,
   Typography,
   IconButton,
-  Divider,
   Stack,
-  Alert,
   CircularProgress,
-  Card,
-  CardContent,
-  CardActions,
+  TextField,
   Button,
-  TextareaAutosize,
 } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
-import useAlphaX from "../../../hooks/useAlphaX";
+import { useGeminiChat } from "../../../hooks/useGeminiChat";
+import { useChatLogic } from "../../../hooks/useChatLogic";
+import ReactMarkdown from "react-markdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFloppyDisk, faPen, faXmark } from "@fortawesome/free-solid-svg-icons";
-import TextField from "@mui/material/TextField";
+import {
+  faComments,
+  faLightbulb,
+  faPaperPlane,
+} from "@fortawesome/free-solid-svg-icons";
+import { TipsModal } from "../../../components/Modals/ModalTipsAlphaX/ModalTipsAlphaX";
+import DotSpinner from "./components/DotSpinner/DotSpinner";
+import { useLocation } from "react-router";
+
 const AlphaX: React.FC = () => {
+  const location = useLocation();
   const {
-    messages,
-    input,
-    editIndex,
-    editText,
+    message,
+    botReply,
     loading,
     error,
-    setInput,
-    handleSend,
-    handleEdit,
-    handleSaveEdit,
-    handleCancelEdit,
-    setEditText,
+    handleChange,
+    handleSubmit: originalHandleSubmit,
     setError,
-  } = useAlphaX();
+    setMessage,
+  } = useGeminiChat();
+
+  const {
+    chatHistory,
+    clearChat,
+    handleSubmit,
+    tipsModalOpen,
+    setTipsModalOpen,
+    isFirstVisit,
+  } = useChatLogic({
+    botReply,
+    message,
+    error,
+    loading,
+    onSubmit: originalHandleSubmit,
+    resetMessage: () => setMessage(""),
+    setError,
+  });
+  useEffect(() => {
+    if (location.state && location.state.question) {
+      setMessage(location.state.question);
+    }
+  }, [location.state, setMessage]);
+
+  const handleSelectTip = (tip: string) => {
+    setMessage(tip);
+  };
 
   return (
     <Box
@@ -46,16 +71,6 @@ const AlphaX: React.FC = () => {
         bgcolor: "transparent",
       }}
     >
-      {error && (
-        <Alert
-          severity="error"
-          onClose={() => setError(null)}
-          sx={{ mx: 2, mt: 2 }}
-        >
-          {error}
-        </Alert>
-      )}
-
       <Paper
         elevation={0}
         sx={{
@@ -68,145 +83,270 @@ const AlphaX: React.FC = () => {
           bgcolor: "transparent",
         }}
       >
-        {messages.map((msg, i) => (
+        {isFirstVisit && chatHistory.length === 0 && (
           <Box
-            key={i}
             sx={{
               display: "flex",
-              justifyContent: msg.sender === "user" ? "flex-end" : "flex-start",
+              justifyContent: "center",
+              alignItems: "center",
+              mb: 2,
+              width: "100%",
+              height: "100%",
             }}
           >
             <Box
               sx={{
-                maxWidth: "75%",
-                position: "relative",
+                p: 2,
+                borderRadius: 2,
+                width: "100%",
+                color: "white",
+                backdropFilter: "blur(10px)",
+                boxShadow: "none",
+                textAlign: "center",
               }}
             >
-              {editIndex === i ? (
-                <Card
-                  variant="outlined"
-                  sx={{
-                    bgcolor: msg.sender === "user" ? "#3f51b5" : "#e0e0e0",
-                    color: msg.sender === "user" ? "#fff" : "#000",
-                    borderRadius: 2,
-                  }}
-                >
-                  <CardContent sx={{ p: 1 }}>
-                    <TextareaAutosize
-                      minRows={3}
-                      value={editText}
-                      onChange={(e) => setEditText(e.target.value)}
-                      style={{
-                        width: "100%",
-                        backgroundColor: "transparent",
-                        border: "1px solid #ccc",
-                        borderRadius: 6,
-                        padding: 8,
-                        color: msg.sender === "user" ? "#fff" : "#000",
-                        resize: "none",
-                        fontFamily: "inherit",
-                        fontSize: "0.9rem",
-                      }}
-                    />
-                  </CardContent>
-                  <CardActions sx={{ justifyContent: "flex-end", pr: 2 }}>
-                    <Button
-                      onClick={handleCancelEdit}
-                      startIcon={<FontAwesomeIcon icon={faXmark} />}
-                      color="error"
-                      size="small"
-                    >
-                      Cancelar
-                    </Button>
-                    <Button
-                      onClick={handleSaveEdit}
-                      startIcon={<FontAwesomeIcon icon={faFloppyDisk} />}
-                      color="success"
-                      size="small"
-                    >
-                      Guardar
-                    </Button>
-                  </CardActions>
-                </Card>
-              ) : (
-                <Box
-                  sx={{
-                    p: 1.5,
-                    borderRadius: 2,
-                    bgcolor: msg.sender === "user" ? "#3f51b5" : "#e0e0e0",
-                    color: msg.sender === "user" ? "#fff" : "#000",
-                  }}
-                >
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Typography variant="body2">{msg.text}</Typography>
-                    {msg.sender === "user" && (
-                      <IconButton
-                        onClick={() => handleEdit(i, msg.text)}
-                        size="small"
-                        sx={{
-                          color: "#90caf9",
-                          "&:hover": {
-                            color: "#1976d2",
-                          },
-                          cursor: "pointer",
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faPen} size="sm" />
-                      </IconButton>
-                    )}
-                  </Stack>
-                </Box>
-              )}
+              <Typography
+                variant="h3"
+                sx={{ mb: 1, fontWeight: "bold", opacity: 0.6 }}
+              >
+                Bienvenido a Alpha X
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{ mb: 2, fontWeight: "bold", opacity: 0.6 }}
+              >
+                Tu asesor inteligente y confiable.
+              </Typography>
             </Box>
           </Box>
+        )}
+        {chatHistory.map((msg, index) => (
+          <Box
+            key={index}
+            sx={{
+              display: "flex",
+              justifyContent:
+                msg.type === "question" ? "flex-end" : "flex-start",
+              mb: 2,
+              mx: "14.6%",
+            }}
+          >
+            {msg.type === "question" ? (
+              <Box
+                sx={{
+                  maxWidth: "75%",
+                  p: 2,
+                  borderRadius: 2,
+                  bgcolor: "rgba(81,20,166,0.45)",
+                  color: "white",
+                }}
+              >
+                <Typography variant="body1">{msg.content}</Typography>
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  maxWidth: "75%",
+                  p: 2,
+                  borderRadius: 2,
+                  background:
+                    "linear-gradient(135deg, rgba(81,20,166,0.2) 0%, rgba(81,20,166,0.1) 100%)",
+                  color: "white",
+                  backdropFilter: "blur(10px)",
+                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  boxShadow: "none",
+                  textAlign: "justify",
+                  textAlignLast: "left",
+                }}
+              >
+                {msg.type === "error" ? (
+                  <Typography variant="body1" sx={{ color: "#ff5252" }}>
+                    {msg.content}
+                  </Typography>
+                ) : (
+                  <ReactMarkdown
+                    children={msg.content}
+                    components={{
+                      p: ({ children }) => (
+                        <Typography
+                          variant="body1"
+                          sx={{ mb: 1.5, lineHeight: 1.6 }}
+                        >
+                          {children}
+                        </Typography>
+                      ),
+                      strong: ({ children }) => (
+                        <strong style={{ color: "#b388ff" }}>{children}</strong>
+                      ),
+                      ul: ({ children }) => (
+                        <ul
+                          style={{
+                            paddingLeft: "20px",
+                            margin: "12px 0",
+                          }}
+                        >
+                          {children}
+                        </ul>
+                      ),
+                      li: ({ children }) => (
+                        <li style={{ marginBottom: "8px" }}>{children}</li>
+                      ),
+                      code: ({ children }) => (
+                        <Box
+                          component="pre"
+                          sx={{
+                            backgroundColor: "rgba(0,0,0,0.3)",
+                            borderRadius: 1,
+                            p: 1.5,
+                            overflowX: "auto",
+                            fontSize: "0.85rem",
+                            mt: 1,
+                          }}
+                        >
+                          {children}
+                        </Box>
+                      ),
+                    }}
+                  />
+                )}
+              </Box>
+            )}
+          </Box>
         ))}
+
+        {loading && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-start",
+              mx: 2,
+              ml: "14.6%",
+            }}
+          >
+            <DotSpinner />
+          </Box>
+        )}
       </Paper>
 
-      <Divider sx={{ borderColor: "#ccc" }} />
-
-      <Box sx={{ p: 2 }}>
-        <Stack direction="row" spacing={1}>
-          <TextField
-            variant="outlined"
-            placeholder="Escribe tu mensaje..."
-            fullWidth
-            value={input}
-            disabled={loading}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+      <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+        <Box
+          sx={{
+            p: 2,
+            width: "70%",
+            border: "1px #571773 solid",
+            borderRadius: "30px",
+            mb: 2,
+          }}
+        >
+          <Stack direction="row" spacing={1}>
+            <TextField
+              variant="outlined"
+              placeholder="Escribe tu mensaje..."
+              fullWidth
+              value={message}
+              disabled={loading}
+              onChange={handleChange}
+              onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+              sx={{
+                backgroundColor: "rgba(87, 23, 115, 0.68)", // tu color base
+                borderRadius: "10px",
+                input: { color: "white" },
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "10px",
+                  "& fieldset": {
+                    borderColor: "rgba(255, 255, 255, 0.2)", // más suave
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#a45de6", // púrpura claro
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#a45de6", // más llamativo al enfocar
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "white",
+                },
+              }}
+              InputProps={{
+                endAdornment: (
+                  <IconButton
+                    edge="end"
+                    onClick={handleSubmit}
+                    disabled={loading || message.trim() === ""}
+                    sx={{
+                      color: "white",
+                      p: 1,
+                      "&:hover": {
+                        backgroundColor: "rgba(255, 255, 255, 0.15)", // sutil y elegante
+                      },
+                    }}
+                  >
+                    {loading ? (
+                      <CircularProgress size={18} sx={{ color: "#e0e0e0" }} />
+                    ) : (
+                      <FontAwesomeIcon icon={faPaperPlane} />
+                    )}
+                  </IconButton>
+                ),
+              }}
+              InputLabelProps={{ style: { color: "white" } }}
+            />
+          </Stack>
+          <Box
             sx={{
-              input: { color: "white" },
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "white",
-                },
-                "&:hover fieldset": {
-                  borderColor: "white",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "white",
-                },
-              },
-              "& .MuiInputLabel-root": {
-                color: "white",
-              },
+              pt: 2,
+              display: "flex",
+              gap: 1,
+              overflowX: "auto",
+              width: "100%",
             }}
-            InputLabelProps={{ style: { color: "white" } }}
-          />
-
-          <IconButton
-            color="primary"
-            onClick={handleSend}
-            disabled={loading || input.trim() === ""}
           >
-            {loading ? (
-              <CircularProgress size={20} color="inherit" />
-            ) : (
-              <SendIcon />
-            )}
-          </IconButton>
-        </Stack>
+            <Button
+              variant="outlined"
+              onClick={clearChat}
+              startIcon={<FontAwesomeIcon icon={faComments} />}
+              sx={{
+                color: "white",
+                border: "none",
+                backgroundColor: "rgba(87, 23, 115, 0.68)",
+                whiteSpace: "nowrap",
+                borderRadius: "10px",
+                width: "calc(100% * 0.14)", // equivale a 12% del contenedor
+                flexShrink: 0,
+                "&:hover": {
+                  borderColor: "white",
+                  backgroundColor: "rgba(87, 23, 115, 0.90)",
+                },
+              }}
+            >
+              Nuevo chat
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => setTipsModalOpen(true)}
+              startIcon={<FontAwesomeIcon icon={faLightbulb} />}
+              sx={{
+                color: "white",
+                border: "none",
+                borderRadius: "10px",
+                backgroundColor: "rgba(87, 23, 115, 0.68)",
+                width: "12%",
+                "&:hover": {
+                  borderColor: "white",
+                  backgroundColor: "rgba(87, 23, 115, 0.90)",
+                },
+              }}
+            >
+              Consejos
+            </Button>
+          </Box>
+        </Box>
       </Box>
+      <TipsModal
+        open={tipsModalOpen}
+        onClose={() => setTipsModalOpen(false)}
+        onSelectTip={handleSelectTip}
+      />
     </Box>
   );
 };

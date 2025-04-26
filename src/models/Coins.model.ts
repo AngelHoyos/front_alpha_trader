@@ -1,6 +1,6 @@
 export interface Coin {
-  name?: string; 
-  icon?: any; 
+  name?: string;
+  icon?: any;
   price: string;
   change: string;
   isPositive: boolean;
@@ -12,9 +12,25 @@ export interface Coin {
   };
   marketCap?: string;
 }
+export interface Coins {
+  id: string;
+  name: string;
+  symbol: string;
+  binanceSymbol: string;
+  image: string;
+  marketCap: number;
+  marketCapRank: number;
+  currentPrice: number;
+  high24h: number;
+  low24h: number;
+  priceChangePercentage24h: number;
+  totalVolume: number;
+  trend24h: string;
+  volumeQuote24h:number;
+}
 
 export interface CoinsCardProps {
-  coins: Coin[];
+  coins: Coins[];
 }
 
 export interface CoinsTableProps {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   AreaChart,
   Area,
@@ -13,8 +13,8 @@ import {
 import { Box, Typography, Card } from "@mui/material";
 import { motion } from "framer-motion";
 import useCryptoChart from "../../../hooks/useCryptoChart";
-import ChartSelector from "./components/ChartSelector/ChartSelector";
 import { CryptoChartProps } from "../../../models/Chart.model";
+import ChartSelectorWrapper from "./components/ChartSelectorWrapper/ChartSelectorWrapper";
 
 const MotionBox = motion(Box);
 
@@ -26,41 +26,39 @@ const formatCurrency = (value: number) => {
   }).format(value);
 };
 
-const CryptoChart: React.FC<
-  CryptoChartProps & { isSimple?: boolean; subtitle?: string }
-> = ({
+const CryptoChart: React.FC<CryptoChartProps> = ({
   title,
   subtitle,
   data,
   backgroundColor = "linear-gradient(to bottom, #2D0C43, #16082C)",
   isSimple = false,
+  preferredCoin,
+  setPreferredCoin,
+  onChartSettingsChange, 
+  listCoin,
 }) => {
-  const {
-    interval,
-    setInterval,
-    chartType,
-    setChartType,
-    minPrice,
-    maxPrice,
-    intervals,
-  } = useCryptoChart(data);
+  const { interval, setInterval, chartType, setChartType, minPrice, maxPrice } =
+    useCryptoChart(data);
 
-  const chartData = data[interval]
-    ? data[interval]!.map((d) => ({
+  // Estado para controlar los datos del gráfico
+  const [chartData, setChartData] = useState<any[]>([]);
+
+  useEffect(() => {
+    onChartSettingsChange?.({ interval, chartType, preferredCoin });
+  }, [interval, chartType, preferredCoin]);
+
+  // Limpiar y formatear los datos al recibir nuevos
+  useEffect(() => {
+    if (data[interval] && data[interval].length > 0) {
+      const newData = data[interval].map((d) => ({
         ...d,
         price: isNaN(parseFloat(d.price.toString()))
           ? 0
-          : parseFloat(d.price.toFixed(2)),
-      }))
-    : [];
-
-  if (chartData.length === 0) {
-    return (
-      <Typography variant="h6" color="error">
-        No hay datos disponibles
-      </Typography>
-    );
-  }
+          : parseFloat(d.price.toFixed(0)),
+      }));
+      setChartData(newData);
+    }
+  }, [data, interval]); // Se ejecuta cuando los datos o el intervalo cambian
 
   const chart = (
     <ResponsiveContainer width="100%" height={400}>
@@ -159,8 +157,15 @@ const CryptoChart: React.FC<
             </Typography>
           )}
         </Box>
-        <ChartSelector
-          {...{ interval, setInterval, chartType, setChartType, intervals }}
+        <ChartSelectorWrapper
+          interval={interval}
+          setInterval={setInterval}
+          chartType={chartType}
+          setChartType={setChartType}
+          intervals={["1w", "1m", "1y"]}
+          preferredCoin={preferredCoin}
+          setPreferredCoin={setPreferredCoin}
+          coins={listCoin}
         />
       </Box>
 
